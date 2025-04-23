@@ -1,26 +1,28 @@
-+++
-title = "19. Mathematics"
-weight = 29
-nodes = [234, 236, 284]
-objectives = ["Review floating-point mathematics including IEEE-754.", "Examine `@r` atomic representation of floating-point values.", "Manipulate and convert floating-point values using the `@r` operations.", "Examine `@s` atomic representation of signed integer values.", "Use `+si` to manipulate `@s` signed integer values.", "Define entropy and its source.", "Utilize `eny` in a random number generator (`og`).", "Distinguish insecure hashing (`mug`) from secure hashing (`shax` and friends)."]
+# S-math
+
++++\
+title = "19. Mathematics"\
+weight = 29\
+nodes = \[234, 236, 284]\
+objectives = \["Review floating-point mathematics including IEEE-754.", "Examine `@r` atomic representation of floating-point values.", "Manipulate and convert floating-point values using the `@r` operations.", "Examine `@s` atomic representation of signed integer values.", "Use `+si` to manipulate `@s` signed integer values.", "Define entropy and its source.", "Utilize `eny` in a random number generator (`og`).", "Distinguish insecure hashing (`mug`) from secure hashing (`shax` and friends)."]\
 +++
 
-_This module introduces how non-`@ud` mathematics are instrumented in
-Hoon.  It may be considered optional and skipped if you are speedrunning
-Hoon School._
+_This module introduces how non-`@ud` mathematics are instrumented in_\
+_Hoon. It may be considered optional and skipped if you are speedrunning_\
+_Hoon School._
 
-All of the math we've done until this point relied on unsigned integers:
-there was no negative value possible, and there were no numbers with a
-fractional part.  How can we work with mathematics that require more
+All of the math we've done until this point relied on unsigned integers:\
+there was no negative value possible, and there were no numbers with a\
+fractional part. How can we work with mathematics that require more\
 than just bare unsigned integers?
 
-`@u` unsigned integers (whether `@ud` decimal, `@ux` hexadecimal, etc.)
-simply count upwards by binary place value from zero.  However, if we
-apply a different interpretive rule to the resulting value, we can treat
-the integer (in memory) _as if_ it corresponded to a different real
-value, such as a [negative
-number](https://en.wikipedia.org/wiki/Integer) or a [number with a
-fractional part](https://en.wikipedia.org/wiki/Rational_number).  Auras
+`@u` unsigned integers (whether `@ud` decimal, `@ux` hexadecimal, etc.)\
+simply count upwards by binary place value from zero. However, if we\
+apply a different interpretive rule to the resulting value, we can treat\
+the integer (in memory) _as if_ it corresponded to a different real\
+value, such as a [negative\
+number](https://en.wikipedia.org/wiki/Integer) or a [number with a\
+fractional part](https://en.wikipedia.org/wiki/Rational_number). Auras\
 make this straightforward to explore:
 
 ```hoon
@@ -46,83 +48,87 @@ make this straightforward to explore:
 '@B\0f'
 ```
 
-How can we actually treat other modes of interpreting numbers as
-mathematical quantities correctly?  That's the subject of this lesson.
+How can we actually treat other modes of interpreting numbers as\
+mathematical quantities correctly? That's the subject of this lesson.
 
-(Ultimately, we are using a concept called [Gödel
-numbering](https://en.wikipedia.org/wiki/G%C3%B6del_numbering) to
-justify mapping some data to a particular representation as a unique
+(Ultimately, we are using a concept called [Gödel\
+numbering](https://en.wikipedia.org/wiki/G%C3%B6del_numbering) to\
+justify mapping some data to a particular representation as a unique\
 integer.)
 
+### Floating-Point Mathematics
 
-##  Floating-Point Mathematics
-
-{% video src="https://media.urbit.org/docs/hoon-school-videos/HS234 - Floating-Point Maths.mp4" /%}
-
-A number with a fractional part is called a “floating-point number” in
-computer science.  This derives from its solution to the problem of
+A number with a fractional part is called a “floating-point number” in\
+computer science. This derives from its solution to the problem of\
 representing the part less than one.
 
-Consider for a moment how you would represent a regular decimal fraction
-if you only had integers available.  You would probably adopt one of
+Consider for a moment how you would represent a regular decimal fraction\
+if you only had integers available. You would probably adopt one of\
 three strategies:
 
-1. [**Rational numbers**](https://en.wikipedia.org/wiki/Fraction).
-   Track whole-number ratios like fractions.  Thus {% math %}1.25 =
-   \frac{5}{4}{% /math %}, thence the pair `(5, 4)`.  Two numbers have
-   to be tracked:  the numerator and the denominator.
-2. [**Fixed-point**](https://en.wikipedia.org/wiki/Fixed-point_arithmetic).
-   Track the value in smaller fixed units (such as thousandths).  By
-   defining the base unit to be {% math %}\frac{1}{1000}{% /math %} , {%
-   math %}1.25{% /math %} may be written {% math %}1250{% /math %}.  One
-   number needs to be tracked:  the value in terms of the scale.  (This is
-   equivalent to rational numbers with only a fixed denominator allowed.)
-3. [**Floating-point**](https://en.wikipedia.org/wiki/Floating-point_arithmetic).
-   Track the value at adjustable scale.  In this case, one needs to
-   represent {% math %}1.25{% /math %} as something like {% math %}125
-   \times 10^{-2}{% /math %}.  Two numbers have to be tracked:  the
-   significand ({% math %}125{% /math %}) and the exponent ({% math %}-2{%
-   /math %}).
+1. [**Rational numbers**](https://en.wikipedia.org/wiki/Fraction).\
+   Track whole-number ratios like fractions. Thus
 
-Most systems use floating-point mathematics to solve this problem.  For
-instance, single-precision floating-point mathematics designate one bit
-for the sign, eight bits for the exponent (which has 127 subtracted from
+1.25 =\
+\frac{5}{4}, thence the pair \`(5, 4)\`. Two numbers have\
+to be tracked: the numerator and the denominator.\
+2\. \[\*\*Fixed-point\*\*]\(https://en.wikipedia.org/wiki/Fixed-point\_arithmetic).\
+Track the value in smaller fixed units (such as thousandths). By\
+defining the base unit to be\frac{1}{1000}, \{%\
+math %\}1.25may be written1250. One\
+number needs to be tracked: the value in terms of the scale. (This is\
+equivalent to rational numbers with only a fixed denominator allowed.)\
+3\. \[\*\*Floating-point\*\*]\(https://en.wikipedia.org/wiki/Floating-point\_arithmetic).\
+Track the value at adjustable scale. In this case, one needs to\
+represent1.25as something like125\
+\times 10^{-2}. Two numbers have to be tracked: the\
+significand (125) and the exponent (-2\{%\
+/math %\}).
+
+Most systems use floating-point mathematics to solve this problem. For\
+instance, single-precision floating-point mathematics designate one bit\
+for the sign, eight bits for the exponent (which has 127 subtracted from\
 it), and twenty-three bits for the significand.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Float_example.svg/640px-Float_example.svg.png)
 
-This number, `0b11.1110.0010.0000.0000.0000.0000.0000`, is converted to
-decimal as {% math %}(-1)^0 \times 2^{(124 - 127)} \times 1.25 = 2^{-3}
-\times 1.25 = 0.15625{% /math %}.
+This number, `0b11.1110.0010.0000.0000.0000.0000.0000`, is converted to\
+decimal as
 
-(If you want to explore the bitwise representation of values, [this
-tool](https://evanw.github.io/float-toy/) allows you to tweak values
+(-1)^0 \times 2^{(124 - 127)} \times 1.25 = 2^{-3}\
+\times 1.25 = 0.15625.
+
+(If you want to explore the bitwise representation of values, [this\
+tool](https://evanw.github.io/float-toy/) allows you to tweak values\
 directly and see the results.)
 
-### Hoon Operations
+#### Hoon Operations
 
-Hoon utilizes the [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754)
+Hoon utilizes the [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754)\
 implementation of floating-point math for four bitwidth representations.
 
-| Aura | Meaning | Example |
-| ---- | ------- | ------- |
-| `@r` | Floating-point value |  |
-| `@rh` | Half-precision 16-bit mathematics | `.~~4.5` |
-| `@rs` | Single-precision 32-bit mathematics | `.4.5` |
-| `@rd` | Double-precision 64-bit mathematics | `.~4.5` |
+| Aura  | Meaning                                 | Example   |
+| ----- | --------------------------------------- | --------- |
+| `@r`  | Floating-point value                    |           |
+| `@rh` | Half-precision 16-bit mathematics       | `.~~4.5`  |
+| `@rs` | Single-precision 32-bit mathematics     | `.4.5`    |
+| `@rd` | Double-precision 64-bit mathematics     | `.~4.5`   |
 | `@rq` | Quadruple-precision 128-bit mathematics | `.~~~4.5` |
 
-There are also a few {% tooltip label="molds" href="/glossary/mold" /%}
-which can represent the separate values of the FP representation.  These
+There are also a few
+
+which can represent the separate values of the FP representation. These\
 are used internally but mostly don't appear in userspace code.
 
-As the {% tooltip label="arms" href="/glossary/arm" /%} for the four
-`@r` auras are identical within their appropriate core, we will use
-[`@rs` single-precision floating-point
-mathematics](/language/hoon/reference/stdlib/3b#rs) to demonstrate all
+As the
+
+for the four\
+\`@r\` auras are identical within their appropriate core, we will use\
+\[\`@rs\` single-precision floating-point\
+mathematics]\(/language/hoon/reference/stdlib/3b#rs) to demonstrate all\
 operations.
 
-#### Conversion to and from other auras
+**Conversion to and from other auras**
 
 Any `@ud` unsigned decimal integer can be directly cast as an `@rs`.
 
@@ -131,8 +137,8 @@ Any `@ud` unsigned decimal integer can be directly cast as an `@rs`.
 1.065.353.216
 ```
 
-However, as you can see here, the conversion is not “correct” for the
-perceived values.  Examining the `@ux` hexadecimal and `@ub` binary
+However, as you can see here, the conversion is not “correct” for the\
+perceived values. Examining the `@ux` hexadecimal and `@ub` binary\
 representation shows why:
 
 ```hoon
@@ -143,26 +149,27 @@ representation shows why:
 0b11.1111.1000.0000.0000.0000.0000.0000
 ```
 
-If you refer back to the 32-bit floating-point example above, you'll see
-why:  to represent one exactly, we have to use {% math %}1.0 = (-1)^0
-\times 2^{{127 - 127}} \times 1{% /math %} and thus
-`0b11.1111.1000.0000.0000.0000.0000.0000`.
+If you refer back to the 32-bit floating-point example above, you'll see\
+why: to represent one exactly, we have to use
 
-So to carry out this conversion from `@ud` to `@rs` correctly, we should
-use the {% tooltip label="++sun:rs"
-href="/language/hoon/reference/stdlib/3b#sunrs" /%} arm.
+1.0 = (-1)^0\
+\times 2^\{{127 - 127\}} \times 1and thus`0b11.1111.1000.0000.0000.0000.0000.0000`.
+
+So to carry out this conversion from `@ud` to `@rs` correctly, we should\
+use the \{% tooltip label="++sun:rs"\
+href="/language/hoon/reference/stdlib/3b#sunrs" /%\} arm.
 
 ```hoon
 > (sun:rs 1)
 .1
 ```
 
-To go the other way requires us to use an algorithm for converting an
-arbitrary number with a fractional part back into `@ud` unsigned
-integers.  The {% tooltip label="++fl"
-href="/language/hoon/reference/stdlib/3b#fl" /%} named tuple
-representation serves this purpose, and uses the [Dragon4
-algorithm](https://dl.acm.org/doi/10.1145/93548.93559) to accomplish the
+To go the other way requires us to use an algorithm for converting an\
+arbitrary number with a fractional part back into `@ud` unsigned\
+integers. The \{% tooltip label="++fl"\
+href="/language/hoon/reference/stdlib/3b#fl" /%\} named tuple\
+representation serves this purpose, and uses the [Dragon4\
+algorithm](https://dl.acm.org/doi/10.1145/93548.93559) to accomplish the\
 conversion:
 
 ```hoon
@@ -176,10 +183,10 @@ conversion:
 [%d s=%.y e=--3 a=1]
 ```
 
-It's up to you to decide how to handle this result, however!  Perhaps a
-better option for many cases is to round the answer to an `@s` integer
-with {% tooltip label="++toi:rs"
-href="/language/hoon/reference/stdlib/3b#toirs" /%}:
+It's up to you to decide how to handle this result, however! Perhaps a\
+better option for many cases is to round the answer to an `@s` integer\
+with \{% tooltip label="++toi:rs"\
+href="/language/hoon/reference/stdlib/3b#toirs" /%\}:
 
 ```hoon
 > (toi:rs .3.1415926535)
@@ -188,9 +195,11 @@ href="/language/hoon/reference/stdlib/3b#toirs" /%}:
 
 (`@s` signed integer math is discussed below.)
 
-### Floating-point specific operations
+#### Floating-point specific operations
 
-As with {% tooltip label="aura" href="/glossary/aura" /%} conversion,
+As with
+
+conversion,\
 the standard mathematical operators don't work for `@rs`:
 
 ```hoon
@@ -201,8 +210,8 @@ the standard mathematical operators don't work for `@rs`:
 .1.0000001
 ```
 
-The {% tooltip label="++rs" href="/language/hoon/reference/stdlib/3b#rs"
-/%} core defines a set of `@rs`-affiliated operations which should be
+The \{% tooltip label="++rs" href="/language/hoon/reference/stdlib/3b#rs"\
+/%\} core defines a set of `@rs`-affiliated operations which should be\
 used instead:
 
 ```hoon
@@ -212,23 +221,23 @@ used instead:
 
 This includes:
 
-- {% tooltip label="++add:rs" href="/language/hoon/reference/stdlib/3b#addrs" /%}, addition
-- {% tooltip label="++sub:rs" href="/language/hoon/reference/stdlib/3b#subrs" /%}, subtraction
-- {% tooltip label="++mul:rs" href="/language/hoon/reference/stdlib/3b#mulrs" /%}, multiplication
-- {% tooltip label="++div:rs" href="/language/hoon/reference/stdlib/3b#divrs" /%}, division
-- {% tooltip label="++gth:rs" href="/language/hoon/reference/stdlib/3b#gthrs" /%}, greater than
-- {% tooltip label="++gte:rs" href="/language/hoon/reference/stdlib/3b#gters" /%}, greater than or equal to
-- {% tooltip label="++lth:rs" href="/language/hoon/reference/stdlib/3b#lthrs" /%}, less than
-- {% tooltip label="++lte:rs" href="/language/hoon/reference/stdlib/3b#lters" /%}, less than or equal to
-- {% tooltip label="++equ:rs" href="/language/hoon/reference/stdlib/3b#equrs" /%}, check equality (but not nearness!)
-- {% tooltip label="++sqt:rs" href="/language/hoon/reference/stdlib/3b#sqtrs" /%}, square root
+* , addition
+* , subtraction
+* , multiplication
+* , division
+* , greater than
+* , greater than or equal to
+* , less than
+* , less than or equal to
+* , check equality (but not nearness!)
+* , square root
 
-### Exercise:  `++is-close`
+#### Exercise: `++is-close`
 
-The {% tooltip label="++equ:rs"
-href="/language/hoon/reference/stdlib/3b#equrs" /%} arm checks for
-complete equality of two values.  The downside of this {% tooltip
-label="arm" href="/glossary/arm" /%} is that it doesn't find very close
+The \{% tooltip label="++equ:rs"\
+href="/language/hoon/reference/stdlib/3b#equrs" /%\} arm checks for\
+complete equality of two values. The downside of this \{% tooltip\
+label="arm" href="/glossary/arm" /%\} is that it doesn't find very close\
 values:
 
 ```hoon
@@ -239,25 +248,25 @@ values:
 %.n
 ```
 
-- Produce an arm which check for two values to be close to each other by
-  an absolute amount.  It should accept three values:  `a`, `b`, and
-  `atol`.  It should return the result of the following comparison:
+*   Produce an arm which check for two values to be close to each other by\
+    an absolute amount. It should accept three values: `a`, `b`, and`atol`. It should return the result of the following comparison:
 
-    {% math block=true %}
     |a-b| \leq \texttt{atol}
-    {% /math %}
 
-#### Tutorial:  Length Converter
+**Tutorial: Length Converter**
 
-- Write a {% tooltip label="generator" href="/glossary/generator" /%} to
-  take a `@tas` input measurement unit of length, a `@rs` value, and a
-  `@tas` output unit to which we will convert the input measurement.
-  For instance, this generator could convert a number of imperial feet
-  to metric decameters.
+* Write a
+
+to\
+take a \`@tas\` input measurement unit of length, a \`@rs\` value, and a\
+\`@tas\` output unit to which we will convert the input measurement.\
+For instance, this generator could convert a number of imperial feet\
+to metric decameters.
 
 **`/gen/convert-length.hoon`**
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
 |=  [fr-meas=@tas num=@rs to-meas=@tas]
 =<
 ^-  @rs
@@ -331,100 +340,105 @@ values:
   --
 ```
 
-This program shows several interesting aspects, which we've covered
+This program shows several interesting aspects, which we've covered\
 before but highlight here:
 
-- Meters form the standard unit of length.
-- `~|` {% tooltip label="sigbar"
-  href="/language/hoon/reference/rune/sig#-sigbar" /%} produces an error
+* Meters form the standard unit of length.
+* `~|` \{% tooltip label="sigbar"\
+  href="/language/hoon/reference/rune/sig#-sigbar" /%\} produces an error\
   message in case of a bad input.
-- `+$` {% tooltip label="lusbuc"
-  href="/language/hoon/reference/rune/lus#-lusbuc" /%} is a type
+* `+$` \{% tooltip label="lusbuc"\
+  href="/language/hoon/reference/rune/lus#-lusbuc" /%\} is a type\
   constructor arm, here for a type union over units of length.
 
-### Exercise:  Measurement Converter
+#### Exercise: Measurement Converter
 
-- Add to this {% tooltip label="generator" href="/glossary/generator"
-  /%} the ability to convert some other measurement (volume, mass,
+* Add to this \{% tooltip label="generator" href="/glossary/generator"\
+  /%\} the ability to convert some other measurement (volume, mass,\
   force, or another of your choosing).
-- Add an argument to the {% tooltip label="cell" href="/glossary/cell"
-  /%} required by the {% tooltip label="gate" href="/glossary/gate" /%}
-  that indicates whether the measurements are distance or your new
-  measurement.
-- Enforce strictly that the `fr-meas` and `to-meas` values are either
+* Add an argument to the \{% tooltip label="cell" href="/glossary/cell"\
+  /%\} required by the
+
+that indicates whether the measurements are distance or your new\
+measurement.
+
+* Enforce strictly that the `fr-meas` and `to-meas` values are either\
   lengths or your new type.
-- Create a new map of conversion values to handle your new measurement
+* Create a new map of conversion values to handle your new measurement\
   conversion method.
-- Convert the functionality into a library.
+* Convert the functionality into a library.
 
-### `++rs` as a Door
+#### `++rs` as a Door
 
-What is `++rs`?  It's a door with 21 arms:
+What is `++rs`? It's a door with 21 arms:
 
 ```hoon
 > rs
 <21|ezj [r=?(%d %n %u %z) <51.njr 139.oyl 33.uof 1.pnw %138>]>
 ```
 
-The {% tooltip label="battery" href="/glossary/battery" /%} of this {%
-tooltip label="core" href="/glossary/core" /%}, pretty-printed as
-`21|ezj`, has 21 arms that define functions specifically for `@rs`
-atoms.  One of these arms is named `++add`; it's a different `add` from
-the standard one we've been using for vanilla atoms, and thus the one we
-used above.  When you invoke {% tooltip label="add:rs"
-href="/language/hoon/reference/stdlib/3b#addrs" /%} instead of just
-`add` in a function call, (1) the `rs` door is produced, and then (2)
-the name search for `add` resolves to the special `add` {% tooltip
-label="arm" href="/glossary/arm" /%} in `rs`. This produces the {%
-tooltip label="gate" href="/glossary/gate" /%} for adding `@rs` atoms:
+The
+
+of this \{%\
+tooltip label="core" href="/glossary/core" /%\}, pretty-printed as\
+\`21|ezj\`, has 21 arms that define functions specifically for \`@rs\`\
+atoms. One of these arms is named \`++add\`; it's a different \`add\` from\
+the standard one we've been using for vanilla atoms, and thus the one we\
+used above. When you invoke \{% tooltip label="add:rs"\
+href="/language/hoon/reference/stdlib/3b#addrs" /%\} instead of just\
+\`add\` in a function call, (1) the \`rs\` door is produced, and then (2)\
+the name search for \`add\` resolves to the special \`add\` \{% tooltip\
+label="arm" href="/glossary/arm" /%\} in \`rs\`. This produces the \{%\
+tooltip label="gate" href="/glossary/gate" /%\} for adding \`@rs\` atoms:
 
 ```hoon
 > add:rs
 <1.uka [[a=@rs b=@rs] <21.ezj [r=?(%d %n %u %z) <51.njr 139.oyl 33.uof 1.pnw %138>]>]>
 ```
 
-What about the sample of the `rs` {% tooltip label="door"
-href="/glossary/door" /%}?  The pretty-printer shows `r=?(%d %n %u %z)`.
-The {% tooltip label="rs" href="/language/hoon/reference/stdlib/3b#rs"
-/%} sample can take one of four values: `%d`, `%n`, `%u`, and `%z`.
-These argument values represent four options for how to round `@rs`
+What about the sample of the `rs` \{% tooltip label="door"\
+href="/glossary/door" /%\}? The pretty-printer shows `r=?(%d %n %u %z)`.\
+The \{% tooltip label="rs" href="/language/hoon/reference/stdlib/3b#rs"\
+/%\} sample can take one of four values: `%d`, `%n`, `%u`, and `%z`.\
+These argument values represent four options for how to round `@rs`\
 numbers:
 
-- `%d` rounds down
-- `%n` rounds to the nearest value
-- `%u` rounds up
-- `%z` rounds to zero
+* `%d` rounds down
+* `%n` rounds to the nearest value
+* `%u` rounds up
+* `%z` rounds to zero
 
-The default value is `%z`, round to zero.  When we invoke `++add:rs` to
-call the addition function, there is no way to modify the `rs` door
-sample, so the default rounding option is used.  How do we change it?
+The default value is `%z`, round to zero. When we invoke `++add:rs` to\
+call the addition function, there is no way to modify the `rs` door\
+sample, so the default rounding option is used. How do we change it?\
 We use the `~( )` notation: `~(arm door arg)`.
 
-Let's evaluate the `add` {% tooltip label="arm" href="/glossary/arm" /%}
-of `rs`, also modifying the door {% tooltip label="sample"
-href="/glossary/sample" /%} to `%u` for 'round up':
+Let's evaluate the `add`
+
+of `rs`, also modifying the door \{% tooltip label="sample"\
+href="/glossary/sample" /%\} to `%u` for 'round up':
 
 ```hoon
 > ~(add rs %u)
 <1.uka [[a=@rs b=@rs] <21.ezj [r=?(%d %n %u %z) <51.njr 139.oyl 33.uof 1.pnw %138>]>]>
 ```
 
-This is the gate produced by `add`, and you can see that its sample is a
-pair of `@rs` atoms. But if you look in the context you'll see the {%
-tooltip label="rs" href="/language/hoon/reference/stdlib/3b#rs" /%}
-door. Let's look in the sample of that {% tooltip label="core"
-href="/glossary/core" /%} to make sure that it changed to `%u`. We'll
-use the wing `+6.+7` to look at the sample of the {% tooltip
-label="gate's" href="/glossary/gate" /%} context:
+This is the gate produced by `add`, and you can see that its sample is a\
+pair of `@rs` atoms. But if you look in the context you'll see the \{%\
+tooltip label="rs" href="/language/hoon/reference/stdlib/3b#rs" /%\}\
+door. Let's look in the sample of that \{% tooltip label="core"\
+href="/glossary/core" /%\} to make sure that it changed to `%u`. We'll\
+use the wing `+6.+7` to look at the sample of the \{% tooltip\
+label="gate's" href="/glossary/gate" /%\} context:
 
 ```hoon
 > +6.+7:~(add rs %u)
 r=%u
 ```
 
-It did indeed change.  We also see that the door {% tooltip
-label="sample" href="/glossary/sample"/%} uses the {% tooltip
-label="face" href="/glossary/face" /%} `r`, so let's use that instead of
+It did indeed change. We also see that the door \{% tooltip\
+label="sample" href="/glossary/sample"/%\} uses the \{% tooltip\
+label="face" href="/glossary/face" /%\} `r`, so let's use that instead of\
 the unwieldy `+6.+7`:
 
 ```hoon
@@ -439,7 +453,7 @@ We can do the same thing for rounding down, `%d`:
 %d
 ```
 
-Let's see the rounding differences in action. Because `~(add rs %u)`
+Let's see the rounding differences in action. Because `~(add rs %u)`\
 produces a gate, we can call it like we would any other gate:
 
 ```hoon
@@ -450,79 +464,78 @@ produces a gate, we can call it like we would any other gate:
 .4.2527037
 ```
 
-This difference between rounding up and rounding down might seem strange
-at first.  There is a difference of 0.0000003 between the two answers.
-Why does this gap exist?  Single-precision floats are 32-bit and there's
-only so many distinctions that can be made in floats before you run out
+This difference between rounding up and rounding down might seem strange\
+at first. There is a difference of 0.0000003 between the two answers.\
+Why does this gap exist? Single-precision floats are 32-bit and there's\
+only so many distinctions that can be made in floats before you run out\
 of bits.
 
-Just as there is a {% tooltip label="door" href="/glossary/door" /%} for
-`@rs` functions, there is a Hoon standard library door for `@rd`
-functions (double-precision 64-bit floats), another for `@rq` functions
-(quad-precision 128-bit floats), and one more for `@rh` functions
+Just as there is a
+
+for\
+\`@rs\` functions, there is a Hoon standard library door for \`@rd\`\
+functions (double-precision 64-bit floats), another for \`@rq\` functions\
+(quad-precision 128-bit floats), and one more for \`@rh\` functions\
 (half-precision 16-bit floats).
 
+### Signed Integer Mathematics
 
-##  Signed Integer Mathematics
+Similar to floating-point representations, [signed\
+integer](https://en.wikipedia.org/wiki/Signed_number_representations)\
+representations use an internal bitwise convention to indicate whether a\
+number should be treated as having a negative sign in front of the\
+magnitude or not. There are several ways to represent signed integers:
 
-Similar to floating-point representations, [signed
-integer](https://en.wikipedia.org/wiki/Signed_number_representations)
-representations use an internal bitwise convention to indicate whether a
-number should be treated as having a negative sign in front of the
-magnitude or not.  There are several ways to represent signed integers:
-
-1. [**Sign-magnitude**](https://en.wikipedia.org/wiki/Signed_number_representations#Sign%E2%80%93magnitude).
-   Use the first bit in a fixed-bit-width representation to indicate
-   whether the whole should be multiplied by {% math %}-1{% /math %},
-   e.g. `0010.1011` for {% math %}43_{10}{% /math %} and `1010.1011` for
-   {% math %}-43_{10}{% /math %}.  (This is similar to the
+1. [**Sign-magnitude**](https://en.wikipedia.org/wiki/Signed_number_representations#Sign%E2%80%93magnitude).\
+   Use the first bit in a fixed-bit-width representation to indicate\
+   whether the whole should be multiplied by-1,\
+   e.g. `0010.1011` for43\_{10}and `1010.1011` for-43\_{10}. (This is similar to the\
    floating-point solution.)
-2. [**One's complement**](https://en.wikipedia.org/wiki/Ones%27_complement).  Use
-   the bitwise `NOT` operation to represent the value, e.g. `0010.1011`
-   for {% math %}43_{10}{% /math %} and `1101.0100` for {% math
-   %}-43_{10}{% /math %}.  This has the advantage that arithmetic
-   operations are trivial, e.g. {% math %}43_{10} - 41_{10}{% /math %} =
-   `0010.1011` + `1101.0110` = `1.0000.0001`, end-around carry the
-   overflow to yield `0000.0010` = 2.  (This is commonly used in
+2. [**One's complement**](https://en.wikipedia.org/wiki/Ones'_complement). Use\
+   the bitwise `NOT` operation to represent the value, e.g. `0010.1011`\
+   for43\_{10}and `1101.0100` for \{% math\
+   %\}-43\_{10}. This has the advantage that arithmetic\
+   operations are trivial, e.g.43\_{10} - 41\_{10}=`0010.1011` + `1101.0110` = `1.0000.0001`, end-around carry the\
+   overflow to yield `0000.0010` = 2. (This is commonly used in\
    hardware.)
-3. [**Offset binary**](https://en.wikipedia.org/wiki/Offset_binary).
-   This represents a number normally in binary _except_ that it counts
+3. [**Offset binary**](https://en.wikipedia.org/wiki/Offset_binary).\
+   This represents a number normally in binary _except_ that it counts\
    from a point other than zero, like `-256`.
-4. [**ZigZag**](https://developers.google.com/protocol-buffers/docs/encoding?hl=en#signed-ints).
-   Positive signed integers correspond to even atoms of twice their
-   absolute value, and negative signed integers correspond to odd atoms of
+4. [**ZigZag**](https://developers.google.com/protocol-buffers/docs/encoding?hl=en#signed-ints).\
+   Positive signed integers correspond to even atoms of twice their\
+   absolute value, and negative signed integers correspond to odd atoms of\
    twice their absolute value minus one.
 
-There are tradeoffs in compactness of representation and efficiency of
+There are tradeoffs in compactness of representation and efficiency of\
 mathematical operations.
 
-### Hoon Operations
+#### Hoon Operations
 
-`@u`-{% tooltip label="aura" href="/glossary/aura" /%} atoms are
-_unsigned_ values, but there is a complete set of _signed_ auras in the
-`@s` series.  ZigZag was chosen for Hoon's signed integer representation
-because it represents negative values with small absolute magnitude as
+`@u`-
+
+atoms ar&#x65;_&#x75;nsigned_ values, but there is a complete set of _signed_ auras in the`@s` series. ZigZag was chosen for Hoon's signed integer representation\
+because it represents negative values with small absolute magnitude as\
 short binary terms.
 
-| Aura | Meaning | Example |
-| ---- | ------- | ------- |
-| `@s` | signed integer|  |
-| `@sb` | signed binary | `--0b11.1000` (positive) |
-|       |               | `-0b11.1000` (negative) |
-| `@sd` | signed decimal | `--1.000.056` (positive) |
-|       |                | `-1.000.056` (negative) |
+| Aura  | Meaning            | Example                   |
+| ----- | ------------------ | ------------------------- |
+| `@s`  | signed integer     |                           |
+| `@sb` | signed binary      | `--0b11.1000` (positive)  |
+|       |                    | `-0b11.1000` (negative)   |
+| `@sd` | signed decimal     | `--1.000.056` (positive)  |
+|       |                    | `-1.000.056` (negative)   |
 | `@sx` | signed hexadecimal | `--0x5f5.e138` (positive) |
-|       |                    | `-0x5f5.e138` (negative) |
+|       |                    | `-0x5f5.e138` (negative)  |
 
-The {% tooltip label="++si" href="/language/hoon/reference/stdlib/3a#si"
-/%} core supports signed-integer operations correctly.  However, unlike
-the `@r` operations, `@s` operations have different names (likely to
+The \{% tooltip label="++si" href="/language/hoon/reference/stdlib/3a#si"\
+/%\} core supports signed-integer operations correctly. However, unlike\
+the `@r` operations, `@s` operations have different names (likely to\
 avoid accidental mental overloading).
 
-To produce a signed integer from an unsigned value, use {% tooltip
-label="++new:si" href="/language/hoon/reference/stdlib/3a#newsi" /%}
-with a sign flag, or simply use {% tooltip label="++sun:si"
-href="/language/hoon/reference/stdlib/3a#sunsi" /%}
+To produce a signed integer from an unsigned value, use \{% tooltip\
+label="++new:si" href="/language/hoon/reference/stdlib/3a#newsi" /%\}\
+with a sign flag, or simply use \{% tooltip label="++sun:si"\
+href="/language/hoon/reference/stdlib/3a#sunsi" /%\}
 
 ```hoon
 > (new:si & 2)
@@ -535,8 +548,8 @@ href="/language/hoon/reference/stdlib/3a#sunsi" /%}
 --5
 ```
 
-To recover an unsigned integer from a signed integer, use {% tooltip
-label="++old:si" href="/language/hoon/reference/stdlib/3a#oldsi" /%},
+To recover an unsigned integer from a signed integer, use \{% tooltip\
+label="++old:si" href="/language/hoon/reference/stdlib/3a#oldsi" /%\},\
 which returns the magnitude and the sign.
 
 ```hoon
@@ -547,19 +560,19 @@ which returns the magnitude and the sign.
 [%.n 5]
 ```
 
-- {% tooltip label="++sum:si" href="/language/hoon/reference/stdlib/3a#sumsi" /%}, addition
-- {% tooltip label="++dif:si" href="/language/hoon/reference/stdlib/3a#difsi" /%}, subtraction
-- {% tooltip label="++pro:si" href="/language/hoon/reference/stdlib/3a#prosi" /%}, multiplication
-- {% tooltip label="++fra:si" href="/language/hoon/reference/stdlib/3a#frasi" /%}, division
-- {% tooltip label="++rem:si" href="/language/hoon/reference/stdlib/3a#remsi" /%}, modulus (remainder after division), b modulo a as `@s`
-- {% tooltip label="++abs:si" href="/language/hoon/reference/stdlib/3a#abssi" /%}, absolute value
-- {% tooltip label="++cmp:si" href="/language/hoon/reference/stdlib/3a#synsi" /%}, test for greater value (as index, `>` → `--1`, `<` → `-1`, `=` → `--0`)
+* , addition
+* , subtraction
+* , multiplication
+* , division
+* , modulus (remainder after division), b modulo a as \`@s\`
+* , absolute value
+* , test for greater value (as index, \`>\` → \`--1\`, \`<\` → \`-1\`, \`=\` → \`--0\`)
 
-To convert a floating-point value from number (atom) to text, use {%
-tooltip label="++scow" href="/language/hoon/reference/stdlib/4m#scow"
-/%} or {% tooltip label="++r-co:co"
-href="/language/hoon/reference/stdlib/4k#r-coco" /%} with {% tooltip
-label="++rlys" href="/language/hoon/reference/stdlib/3b#rlys" /%} (and
+To convert a floating-point value from number (atom) to text, use \{%\
+tooltip label="++scow" href="/language/hoon/reference/stdlib/4m#scow"\
+/%\} or \{% tooltip label="++r-co:co"\
+href="/language/hoon/reference/stdlib/4k#r-coco" /%\} with \{% tooltip\
+label="++rlys" href="/language/hoon/reference/stdlib/3b#rlys" /%\} (and\
 friends):
 
 ```hoon
@@ -570,21 +583,20 @@ friends):
 "3.14159"
 ```
 
-### Beyond Arithmetic
+#### Beyond Arithmetic
 
-The Hoon standard library at the current time omits many [transcendental
-functions](https://en.wikipedia.org/wiki/Transcendental_function), such
-as the trigonometric functions.  It is useful to implement pure-Hoon
-versions of these, although they are not as efficient as {% tooltip
-label="jetted" href="/glossary/jet" /%} mathematical code would be.
+The Hoon standard library at the current time omits many [transcendental\
+functions](https://en.wikipedia.org/wiki/Transcendental_function), such\
+as the trigonometric functions. It is useful to implement pure-Hoon\
+versions of these, although they are not as efficient as \{% tooltip\
+label="jetted" href="/glossary/jet" /%\} mathematical code would be.
 
-- Produce a version of `++factorial` which can operate on `@rs` inputs
+* Produce a version of `++factorial` which can operate on `@rs` inputs\
   correctly.
+*   Produce an exponentiation function `++pow-n` which operates on integer`@rs` only.
 
-- Produce an exponentiation function `++pow-n` which operates on integer
-  `@rs` only.
+    ```hoon
 
-    ```hoon {% copy=true %}
     ++  pow-n
       ::  restricted power, based on integers only
       |=  [x=@rs n=@rs]
@@ -595,142 +607,150 @@ label="jetted" href="/glossary/jet" /%} mathematical code would be.
       ?:  (lth:rs n .2)  p
       $(n (sub:rs n .1), p (mul:rs p x))
     ```
+* Using both of the above, produce the `++sine` function, defined by
 
-- Using both of the above, produce the `++sine` function, defined by
+```
+\sin(x)
+= \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!} x^{2n+1}
+= x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \cdots
+```
 
-    {% math block=true %}
-    \sin(x)
-    = \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!} x^{2n+1}
-    = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \cdots
-    {% /math %}
-
-    <!--
-    \sin(x) = \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!}x^{2n+1}= x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \cdots
-    -->
-
-    ```hoon {% copy=true %}
-    ++  sine
-      ::  sin x = x - x^3/3! + x^5/5! - x^7/7! + x^9/9! - ...
-      |=  x=@rs
-      ^-  @rs
-      =/  rtol  .1e-5
-      =/  p   .0
-      =/  po  .-1
-      =/  i   .0
-      |-  ^-  @rs
-      ?:  (lth:rs (absolute (sub:rs po p)) rtol)  p
-      =/  ii  (add:rs (mul:rs .2 i) .1)
-      =/  term  (mul:rs (pow-n .-1 i) (div:rs (pow-n x ii) (factorial ii)))
-      $(i (add:rs i .1), p (add:rs p term), po p)
-    ```
-
-- Implement `++cosine`.
-
-    {% math block=true %}
-    \cos(x)
-    = \sum_{n=0}^\infty \frac{(-1)^n}{(2n)!} x^{2n}
-    = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \cdots
-    {% /math %}
-
-    <!--
-    \cos(x) = \sum_{n=0}^\infty \frac{(-1)^n}{(2n)!}x^{2n} = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \cdots
-    -->
-
-- Implement `++tangent`.
-
-    {% math block=true %}
-    \tan(x) = \frac{\sin(x)}{\cos(x)}
-    {% /math %}
-
-    <!--
-    \tan(x) = \frac{\sin(x)}{\cos(x)}
-    -->
-
-- As a stretch exercise, look up definitions for [exp
-  (e^x)](https://en.wikipedia.org/wiki/Exponentiation#The_exponential_function)
-  and [natural
-  logarithm](https://en.wikipedia.org/wiki/Natural_logarithm), and
-  implement these.  You can implement a general-purpose exponentiation
-  function using the formula
-
-    {% math block=true %}
-    x^n = \exp(n \\, \text{ln} \\, x)
-    {% /math %}
-
-    <!--
-    x^n = \exp(n \,\text{ln}\, x)
-    -->
-
-    (We will use these in subsequent examples.)
-
-### Exercise:  Calculate the Fibonacci Sequence
-
-The Binet expression gives the {% math %}n^\text{th}{% /math %}
-Fibonacci number.
-
-{% math block=true %}
-F_n = \frac{\varphi^n - (-\varphi)^{-n}}{\sqrt 5}
-= \frac{\varphi^n - (-\varphi)^{-n}}{2 \varphi - 1}
-{% /math %}
-
+````
 <!--
-F_n = \frac{\varphi^n-(-\varphi)^{-n}}{\sqrt 5} = \frac{\varphi^n-(-\varphi)^{-n}}{2 \varphi - 1}
+\sin(x) = \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!}x^{2n+1}= x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \cdots
 -->
 
-- Implement this analytical formula for the Fibonacci series as a {%
-  tooltip label="gate" href="/glossary/gate" /%}.
+```hoon 
+````
 
-##  Date & Time Mathematics
+````
+++  sine
+  ::  sin x = x - x^3/3! + x^5/5! - x^7/7! + x^9/9! - ...
+  |=  x=@rs
+  ^-  @rs
+  =/  rtol  .1e-5
+  =/  p   .0
+  =/  po  .-1
+  =/  i   .0
+  |-  ^-  @rs
+  ?:  (lth:rs (absolute (sub:rs po p)) rtol)  p
+  =/  ii  (add:rs (mul:rs .2 i) .1)
+  =/  term  (mul:rs (pow-n .-1 i) (div:rs (pow-n x ii) (factorial ii)))
+  $(i (add:rs i .1), p (add:rs p term), po p)
+```
+````
 
-Date and time calculations are challenging for a number of reasons:
-What is the correct granularity for an integer to represent?  What value
-should represent the starting value?  How should time zones and leap
+* Implement `++cosine`.
+
+```
+\cos(x)
+= \sum_{n=0}^\infty \frac{(-1)^n}{(2n)!} x^{2n}
+= 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \cdots
+```
+
+```
+<!--
+\cos(x) = \sum_{n=0}^\infty \frac{(-1)^n}{(2n)!}x^{2n} = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \cdots
+-->
+```
+
+* Implement `++tangent`.
+
+```
+\tan(x) = \frac{\sin(x)}{\cos(x)}
+```
+
+```
+<!--
+\tan(x) = \frac{\sin(x)}{\cos(x)}
+-->
+```
+
+* As a stretch exercise, look up definitions for [exp\
+  (e^x)](https://en.wikipedia.org/wiki/Exponentiation#The_exponential_function)\
+  and [natural\
+  logarithm](https://en.wikipedia.org/wiki/Natural_logarithm), and\
+  implement these. You can implement a general-purpose exponentiation\
+  function using the formula
+
+```
+x^n = \exp(n \\, \text{ln} \\, x)
+```
+
+```
+<!--
+x^n = \exp(n \,\text{ln}\, x)
+-->
+
+(We will use these in subsequent examples.)
+```
+
+#### Exercise: Calculate the Fibonacci Sequence
+
+The Binet expression gives the
+
+n^\text{th}
+
+Fibonacci number.
+
+F\_n = \frac{\varphi^n - (-\varphi)^{-n\}}{\sqrt 5}\
+\= \frac{\varphi^n - (-\varphi)^{-n\}}{2 \varphi - 1}
+
+* Implement this analytical formula for the Fibonacci series as a \{%\
+  tooltip label="gate" href="/glossary/gate" /%\}.
+
+### Date & Time Mathematics
+
+Date and time calculations are challenging for a number of reasons:\
+What is the correct granularity for an integer to represent? What value\
+should represent the starting value? How should time zones and leap\
 seconds be handled?
 
-One particularly complicating factor is that there is no [Year
-Zero](https://en.wikipedia.org/wiki/Year_zero); 1 B.C. is immediately
-followed by A.D. 1. (The date systems used in astronomy
-[differ](https://en.wikipedia.org/wiki/Julian_day#cite_note-7) from
+One particularly complicating factor is that there is no [Year\
+Zero](https://en.wikipedia.org/wiki/Year_zero); 1 B.C. is immediately\
+followed by A.D. 1. (The date systems used in astronomy[differ](https://en.wikipedia.org/wiki/Julian_day#cite_note-7) from\
 standard time in this regard, for instance.)
 
-In computing, absolute dates are calculated with respect to some base
-value; we refer to this as the _epoch_.  Unix/Linux systems count time
-forward from Thursday 1 January 1970 00:00:00 UT, for instance.  Windows
-systems count in 10⁻⁷ s intervals from 00:00:00 1 January 1601.  The
-Urbit epoch is `~292277024401-.1.1`, or 1 January 292,277,024,401 B.C.;
-since values are unsigned integers, no date before that time can be
+In computing, absolute dates are calculated with respect to some base\
+value; we refer to this as the _epoch_. Unix/Linux systems count time\
+forward from Thursday 1 January 1970 00:00:00 UT, for instance. Windows\
+systems count in 10⁻⁷ s intervals from 00:00:00 1 January 1601. The\
+Urbit epoch is `~292277024401-.1.1`, or 1 January 292,277,024,401 B.C.;\
+since values are unsigned integers, no date before that time can be\
 represented.
 
-Time values, often referred to as _timestamps_, are commonly represented
-by the [UTC](https://www.timeanddate.com/time/aboututc.html) value.
-Time representations are complicated by offset such as timezones,
-regular adjustments like daylight savings time, and irregular
-adjustments like leap seconds.  (Read [Dave Taubler's excellent
-overview](https://levelup.gitconnected.com/why-is-programming-with-dates-so-hard-7477b4aeff4c)
-of the challenges involved with calculating dates for further
-considerations, as well as [Martin Thoma's “What Every Developer Should
-Know About Time”
+Time values, often referred to as _timestamps_, are commonly represented\
+by the [UTC](https://www.timeanddate.com/time/aboututc.html) value.\
+Time representations are complicated by offset such as timezones,\
+regular adjustments like daylight savings time, and irregular\
+adjustments like leap seconds. (Read [Dave Taubler's excellent\
+overview](https://levelup.gitconnected.com/why-is-programming-with-dates-so-hard-7477b4aeff4c)\
+of the challenges involved with calculating dates for further\
+considerations, as well as [Martin Thoma's “What Every Developer Should\
+Know About Time”\
 (PDF)](https://zenodo.org/record/1443533/files/2018-10-06-what-developers-should-know-about-time.pdf).)
 
-### Hoon Operations
+#### Hoon Operations
 
-A timestamp can be separated into the time portion, which is the
-relative offset within a given day, and the date portion, which
+A timestamp can be separated into the time portion, which is the\
+relative offset within a given day, and the date portion, which\
 represents the absolute day.
 
-There are two {% tooltip label="molds" href="/glossary/mold" /%} to
-represent time in Hoon:  the `@d` {% tooltip label="aura"
-href="/glossary/aura" /%}, with `@da` for a full timestamp and `@dr` for
-an offset; and the {% tooltip label="+$date"
-href="/language/hoon/reference/stdlib/2q#date" /%}/{% tooltip
-label="+$tarp" href="/language/hoon/reference/stdlib/2q#tarp" /%}
+There are two
+
+to\
+represent time in Hoon: the \`@d\` \{% tooltip label="aura"\
+href="/glossary/aura" /%\}, with \`@da\` for a full timestamp and \`@dr\` for\
+an offset; and the \{% tooltip label="+$date"\
+href="/language/hoon/reference/stdlib/2q#date" /%\}/\{% tooltip\
+label="+$tarp" href="/language/hoon/reference/stdlib/2q#tarp" /%\}\
 structure:
 
-| Aura | Meaning | Example |
-| ---- | ------- | ------- |
-| `@da` | Absolute date | `~2022.1.1` |
-|       |               | `~2022.1.1..1.1.1..0000` |
-| `@dr` | Relative date (difference) | `~h5.m30.s12` |
+| Aura  | Meaning                    | Example                   |
+| ----- | -------------------------- | ------------------------- |
+| `@da` | Absolute date              | `~2022.1.1`               |
+|       |                            | `~2022.1.1..1.1.1..0000`  |
+| `@dr` | Relative date (difference) | `~h5.m30.s12`             |
 |       |                            | `~d1000.h5.m30.s12..beef` |
 
 ```hoon
@@ -740,8 +760,8 @@ structure:
 
 `now` returns the `@da` of the current timestamp (in UTC).
 
-To go from a `@da` to a `+$tarp`, use {% tooltip label="++yell"
-href="/language/hoon/reference/stdlib/3c#yell" /%}:
+To go from a `@da` to a `+$tarp`, use \{% tooltip label="++yell"\
+href="/language/hoon/reference/stdlib/3c#yell" /%\}:
 
 ```hoon
 > *tarp
@@ -757,8 +777,8 @@ href="/language/hoon/reference/stdlib/3c#yell" /%}:
 [d=20 h=0 m=0 s=0 f=~]
 ```
 
-To go from a `@da` to a `+$date`, use {% tooltip label="++yore"
-href="/language/hoon/reference/stdlib/3c#yore" /%}:
+To go from a `@da` to a `+$date`, use \{% tooltip label="++yore"\
+href="/language/hoon/reference/stdlib/3c#yore" /%\}:
 
 ```hoon
 > (yore ~2014.6.6..21.09.15..0a16)
@@ -768,8 +788,8 @@ href="/language/hoon/reference/stdlib/3c#yore" /%}:
 [[a=%.y y=2.022] m=5 t=[d=24 h=16 m=20 s=57 f=~[0xbaec]]]
 ```
 
-To go from a `+$date` to a `@da`, use {% tooltip label="++year"
-href="/language/hoon/reference/stdlib/3c#year" /%}:
+To go from a `+$date` to a `@da`, use \{% tooltip label="++year"\
+href="/language/hoon/reference/stdlib/3c#year" /%\}:
 
 ```hoon
 > (year [[a=%.y y=2.014] m=8 t=[d=4 h=20 m=4 s=57 f=~[0xd940]]])
@@ -779,8 +799,8 @@ href="/language/hoon/reference/stdlib/3c#year" /%}:
 ~2022.5.24..16.24.16..d184
 ```
 
-To go from a `+$tarp` to a `@da`, use {% tooltip label="++yule"
-href="/language/hoon/reference/stdlib/3c#yule" /%}:
+To go from a `+$tarp` to a `@da`, use \{% tooltip label="++yule"\
+href="/language/hoon/reference/stdlib/3c#yule" /%\}:
 
 ```hoon
 > (yule (yell now))
@@ -803,19 +823,20 @@ The Urbit date system correctly compensates for the lack of Year Zero:
 ~1-.1.1
 ```
 
-The {% tooltip label="++yo" href="/language/hoon/reference/stdlib/3c#yo"
-/%} core contains constants useful for calculating time, but in general
+The \{% tooltip label="++yo" href="/language/hoon/reference/stdlib/3c#yo"\
+/%\} core contains constants useful for calculating time, but in general\
 you should not hand-roll time or timezone calculations.
 
-### Tutorial:  Julian Day
+#### Tutorial: Julian Day
 
-Astronomers use the [Julian
-day](https://en.wikipedia.org/wiki/Julian_day) to uniquely denote days.
-(This is not to be confused with the Julian calendar.)  The following
-core demonstrates conversion to and from Julian days using signed
+Astronomers use the [Julian\
+day](https://en.wikipedia.org/wiki/Julian_day) to uniquely denote days.\
+(This is not to be confused with the Julian calendar.) The following\
+core demonstrates conversion to and from Julian days using signed\
 integer (`@sd`) and date (`@da`) mathematics.
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
 |%
 ++  ju
   |%
@@ -862,16 +883,14 @@ integer (`@sd`) and date (`@da`) mathematics.
 --
 ```
 
+### Unusual Bases
 
+#### Phonetic Base
 
-##  Unusual Bases
-
-### Phonetic Base
-
-The `@q` aura is similar to `@p` except for two details:  it doesn't
-obfuscate names (as planets do) and it can be used for any size of atom
-without adjust its width to fill the same size.  Prefixes and suffixes
-are in the same order as `@p`, however.  Thus:
+The `@q` aura is similar to `@p` except for two details: it doesn't\
+obfuscate names (as planets do) and it can be used for any size of atom\
+without adjust its width to fill the same size. Prefixes and suffixes\
+are in the same order as `@p`, however. Thus:
 
 ```hoon
 > `@q`0
@@ -890,16 +909,17 @@ are in the same order as `@p`, however.  Thus:
 .~nec-dozzod-dozzod-dozzod-dozzod-dozzod-dozzod-dozzod-dozzod
 ```
 
-`@q` {% tooltip label="auras" href="/glossary/aura" /%} can be used as
+`@q`
+
+can be used as\
 sequential mnemonic markers for values.
 
-The {% tooltip label="++po" href="/language/hoon/reference/stdlib/4a#po"
-/%} core contains tools for directly parsing `@q` atoms.
+The \{% tooltip label="++po" href="/language/hoon/reference/stdlib/4a#po"\
+/%\} core contains tools for directly parsing `@q` atoms.
 
-### Base-32 and Base-64
+#### Base-32 and Base-64
 
-The base-32 representation uses the characters
-`0123456789abcdefghijklmnopqrstuv` to represent values.  The digits are
+The base-32 representation uses the characters`0123456789abcdefghijklmnopqrstuv` to represent values. The digits are\
 separated into collections of five characters separated by `.` dot.
 
 ```hoon
@@ -916,9 +936,8 @@ separated into collections of five characters separated by `.` dot.
 0vt3a.aa400
 ```
 
-The base-64 representation uses the characters
-`0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-~` to
-represent values.  The digits are separated into collections of five
+The base-64 representation uses the characters`0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-~` to\
+represent values. The digits are separated into collections of five\
 characters separated by `.` dot.
 
 ```hoon
@@ -938,61 +957,65 @@ characters separated by `.` dot.
 0wez.kFh00
 ```
 
+### Randomness
 
-##  Randomness
+#### Entropy
 
-### Entropy
-
-You previously saw entropy introduced when we discussed stateful random
-number generation.  Let's dig into what's actually going on with
+You previously saw entropy introduced when we discussed stateful random\
+number generation. Let's dig into what's actually going on with\
 entropy.
 
-It is not straightforward for a computer, a deterministic machine, to
-produce an unpredictable sequence.  We can either use a source of true
-randomness (such as the third significant digit of chip temperature or
-another [hardware
-source](https://en.wikipedia.org/wiki/Hardware_random_number_generator))
-or a source of artificial randomness (such as a sequence of numbers the
+It is not straightforward for a computer, a deterministic machine, to\
+produce an unpredictable sequence. We can either use a source of true\
+randomness (such as the third significant digit of chip temperature or\
+another [hardware\
+source](https://en.wikipedia.org/wiki/Hardware_random_number_generator))\
+or a source of artificial randomness (such as a sequence of numbers the\
 user cannot predict).
 
-For instance, consider the sequence _3 1 4 1 5 9 2 6 5 3 5 8 9 7 9 3_.
-If you recognize the pattern as the constant π, you can predict the
-first few digits, but almost certainly not more than that.  The sequence
-is deterministic (as it is derived from a well-characterized
-mathematical process) but unpredictable (as you cannot _a priori_ guess
+For instance, consider the sequence _3 1 4 1 5 9 2 6 5 3 5 8 9 7 9 3_.\
+If you recognize the pattern as the constant π, you can predict the\
+first few digits, but almost certainly not more than that. The sequence\
+is deterministic (as it is derived from a well-characterized\
+mathematical process) but unpredictable (as you cannot _a priori_ guess\
 what the next digit will be).
 
-Computers often mix both deterministic processes (called “pseudorandom
-number generators”) with random inputs, such as the current timestamp,
-to produce high-quality random numbers for use in games, modeling,
-cryptography, and so forth.  The Urbit entropy value `eny` is derived
-from the underlying host OS's `/dev/urandom` device, which uses sources
+Computers often mix both deterministic processes (called “pseudorandom\
+number generators”) with random inputs, such as the current timestamp,\
+to produce high-quality random numbers for use in games, modeling,\
+cryptography, and so forth. The Urbit entropy value `eny` is derived\
+from the underlying host OS's `/dev/urandom` device, which uses sources\
 like keystroke typing latency to produce random bits.
 
-### Random Numbers
+#### Random Numbers
 
-Given a source of entropy to seed a random number generator, one can
-then use the {% tooltip label="++og"
-href="/language/hoon/reference/stdlib/3d#og" /%} door to produce various
-kinds of random numbers.  The basic operations of `++og` are described
-in [the lesson on subject-oriented
-programming](/courses/hoon-school/O-subject).
+Given a source of entropy to seed a random number generator, one can\
+then use the \{% tooltip label="++og"\
+href="/language/hoon/reference/stdlib/3d#og" /%\} door to produce various\
+kinds of random numbers. The basic operations of `++og` are described\
+in [the lesson on subject-oriented\
+programming](../../../courses/hoon-school/O-subject/).
 
-### Exercise:  Implement a random-number generator from scratch
+#### Exercise: Implement a random-number generator from scratch
 
-- Produce a random stream of bits using the linear congruential random
+* Produce a random stream of bits using the linear congruential random\
   number generator.
 
-The linear congruential random number generator produces a stream of
-random bits with a repetition period of {% math %}2^{31}{% /math %}.
-Numericist John Cook [explains how LCGs
+The linear congruential random number generator produces a stream of\
+random bits with a repetition period of
+
+2^{31}.\
+Numericist John Cook [explains how LCGs\
 work](https://www.johndcook.com/blog/2017/07/05/simple-random-number-generator/):
 
-> The linear congruential generator used here starts with an arbitrary seed, then at each step produces a new number by multiplying the previous number by a constant and taking the remainder by {% math %}2^{31} - 1{% /math %}.
+> The linear congruential generator used here starts with an arbitrary seed, then at each step produces a new number by multiplying the previous number by a constant and taking the remainder by
+>
+> 2^{31} - 1.
 
 **`/gen/lcg.hoon`**
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
 |=  n=@ud                 :: n is the number of bits to return
 =/  z  20.220.524         :: z is the seed
 =/  a  742.938.285        :: a is the multiplier
@@ -1009,24 +1032,27 @@ work](https://www.johndcook.com/blog/2017/07/05/simple-random-number-generator/)
 ==
 ```
 
-Can you verify that `1`s constitute about half of the values in this bit
+Can you verify that `1`s constitute about half of the values in this bit\
 stream, as Cook illustrates in Python?
 
-### Exercise:  Produce uniformly-distributed random numbers
+#### Exercise: Produce uniformly-distributed random numbers
 
-- Using entropy as the source, produce uniform random numbers:  that is,
-  numbers in the range [0, 1] with equal likelihood to machine
+* Using entropy as the source, produce uniform random numbers: that is,\
+  numbers in the range \[0, 1] with equal likelihood to machine\
   precision.
 
-We use the LCG defined above, then chop out 23-bit slices using {%
-tooltip label="++rip" href="/language/hoon/reference/stdlib/2c#rip" /%}
-to produce each number, manually compositing the result into a valid
-floating-point number in the range [0, 1].  (We avoid producing special
+We use the LCG defined above, then chop out 23-bit slices using \{%\
+tooltip label="++rip" href="/language/hoon/reference/stdlib/2c#rip" /%\}\
+to produce each number, manually compositing the result into a valid\
+floating-point number in the range \[0, 1]. (We avoid producing special\
 sequences like [`NaN`](https://en.wikipedia.org/wiki/NaN).)
 
 **`/gen/uniform.hoon`**
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true' data-mode='collapse'></div>
+
 !:
 =<
 |=  n=@ud  :: n is the number of values to return
@@ -1057,58 +1083,51 @@ sequences like [`NaN`](https://en.wikipedia.org/wiki/NaN).)
 --
 ```
 
-- Convert the above to a `%say` {% tooltip label="generator"
-  href="/glossary/generator" /%} that can optionally accept a seed; if
+* Convert the above to a `%say` \{% tooltip label="generator"\
+  href="/glossary/generator" /%\} that can optionally accept a seed; if\
   no seed is provided, use `eny`.
-
-- Produce a higher-quality Mersenne Twister uniform RNG, such as [per
-  this
+* Produce a higher-quality Mersenne Twister uniform RNG, such as [per\
+  this\
   method](https://xilinx.github.io/Vitis_Libraries/quantitative_finance/2022.1/guide_L1/RNGs/RNG.html).
 
-### Exercise:  Produce normally-distributed random numbers
+#### Exercise: Produce normally-distributed random numbers
 
-- Produce a normally-distributed random number generator using the
+* Produce a normally-distributed random number generator using the\
   uniform RNG described above.
 
-The normal distribution, or bell curve, describes the randomness of
-measurement.  The mean, or average value, is at zero, while points fall
+The normal distribution, or bell curve, describes the randomness of\
+measurement. The mean, or average value, is at zero, while points fall\
 farther and farther away with increasingly less likelihood.
 
 ![A normal distribution curve with standard deviations marked](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Standard_deviation_diagram.svg/640px-Standard_deviation_diagram.svg.png)
 
-One way to get from a uniform random number to a normal random number is
-[to use the uniform random number as the _cumulative distribution
-function_
-(CDF)](https://www.omscs-notes.com/simulation/generating-uniform-random-numbers/),
+One way to get from a uniform random number to a normal random number is[to use the uniform random number as the _cumulative distribution_\
+_function_\
+(CDF)](https://www.omscs-notes.com/simulation/generating-uniform-random-numbers/),\
 an index into “how far” the value is along the normal curve.
 
 ![A cumulative distribution function for three normal distributions](https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Normal_Distribution_CDF.svg/640px-Normal_Distribution_CDF.svg.png)
 
 This is an approximation which is accurate to one decimal place:
 
-{% math block=true %}
-Z = \frac{U^{0.135} - (1-U)^{0.135}}{0.1975}
-{% /math %}
+Z = \frac{U^{0.135} - (1-U)^{0.135\}}{0.1975}
 
 where
 
-- sgn is the signum or sign function.
+* sgn is the signum or sign function.
 
-<!--
-$$
-Z = \frac{U^{0.135}-(1-U)^{0.135}}{0.1975}
-$$
--->
+To calculate an arbitrary power of a floating-point number, we require a\
+few transcendental functions, in particular the natural logarithm and\
+exponentiation of base
 
-To calculate an arbitrary power of a floating-point number, we require a
-few transcendental functions, in particular the natural logarithm and
-exponentiation of base {% math %}e{% /math %}.  The following helper
-core contains relatively inefficient but clear implementations of
+e. The following helper\
+core contains relatively inefficient but clear implementations of\
 standard numerical methods.
 
 **`/gen/normal.hoon`**
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
 !:
 =<
 |=  n=@ud  :: n is the number of values to return
@@ -1196,187 +1215,84 @@ standard numerical methods.
 --
 ```
 
-### Exercise:  Upgrade the normal RNG
+#### Exercise: Upgrade the normal RNG
 
-A more complicated formula uses several constants to improve the
+A more complicated formula uses several constants to improve the\
 accuracy significantly:
 
-{% math block=true %}
-Z = \text{sgn}\left(U-\frac{1}{2}\right) \left( t - \frac{c_{0}+c_{1} t+c_{2} t^{2}}{1+d_{1} t+d_{2} t^{2} + d_{3} t^{3}} \right)
-{% /math %}
+Z = \text{sgn}\left(U-\frac{1}{2}\right) \left( t - \frac{c\_{0}+c\_{1} t+c\_{2} t^{2\}}{1+d\_{1} t+d\_{2} t^{2} + d\_{3} t^{3\}} \right)
 
 where
 
-- sgn is the signum or sign function;
-- {% math %}t{% /math %} is {% math %}\sqrt{-\ln[\min(U, 1-U)^2]}{% /math %}; and
-- the constants are:
-  - {% math %}c_0 = 2.515517{% /math %}
-  - {% math %}c_1 = 0.802853{% /math %}
-  - {% math %}c_2 = 0.010328{% /math %}
-  - {% math %}d_1 = 1.532788{% /math %}
-  - {% math %}d_2 = 0.189268{% /math %}
-  - {% math %}d_3 = 0.001308{% /math %}
+* sgn is the signum or sign function;
+*
 
-<!--
-$$
-Z = \text{sgn}\left(U-\frac{1}{2}\right) \left( t - \frac{c_{0}+c_{1} t+c_{2} t^{2}}{1+d_{1} t+d_{2} t^{2} + d_{3} t^{3}} \right)
-$$
--->
+tis\sqrt{-\ln\[\min(U, 1-U)^2]}; and\
+\- the constants are:\
+-c\_0 = 2.515517
 
-- Implement this formula in Hoon to produce normally-distributed random numbers.
-- How would you implement other random number generators?
+*
 
-<!--
-**`/gen/normal2.hoon`**
+c\_1 = 0.802853
 
-```hoon
-!:
-=<
-|=  n=@ud  :: n is the number of values to return
-^-  (list @rs)
-=/  values  (rip 5 (~(lcg gen 20.220.524) n))
-=/  mask-clear           0b111.1111.1111.1111.1111.1111
-=/  mask-fill   0b11.1111.0000.0000.0000.0000.0000.0000
-=/  clears    (turn values |=(a=@rs (dis mask-clear a)))
-=/  uniforms  (turn clears |=(a=@ (sub:rs (mul:rs .2 (con mask-fill a)) .1.0)))
-(turn uniforms normal)
-|%
-++  sgn
-  |=  x=@rs
-  ^-  @rs
-  ?:  (lth:rs x .0)
-    .-1
-  ?:  (gth:rs x .0)
-    .1
-  .0
-++  factorial
-  :: integer factorial, not gamma function
-  |=  x=@rs
-  ^-  @rs
-  =/  t=@rs  .1
-  |-  ^-  @rs
-  ?:  |(=(x .1) (lth x .1))  t
-  $(x (sub:rs x .1), t (mul:rs t x))
-++  absrs
-  |=  x=@rs  ^-  @rs
-  ?:  (gth:rs x .0)
-    x
-  (sub:rs .0 x)
-++  exp
-  |=  x=@rs
-  ^-  @rs
-  =/  rtol  .1e-5
-  =/  p   .1
-  =/  po  .-1
-  =/  i   .1
-  |-  ^-  @rs
-  ?:  (lth:rs (absrs (sub:rs po p)) rtol)  p
-  $(i (add:rs i .1), p (add:rs p (div:rs (pow-n x i) (factorial i))), po p)
-++  pow-n
-  ::  restricted power, based on integers only
-  |=  [x=@rs n=@rs]
-  ^-  @rs
-  ?:  =(n .0)  .1
-  =/  p  x
-  |-  ^-  @rs
-  ?:  (lth:rs n .2)  p
-  $(n (sub:rs n .1), p (mul:rs p x))
-++  ln
-  ::  natural logarithm, z > 0
-  |=  z=@rs
-  ^-  @rs
-  =/  rtol  .1e-5
-  =/  p   .0
-  =/  po  .-1
-  =/  i   .0
-  |-  ^-  @rs
-  ?:  (lth:rs (absrs (sub:rs po p)) rtol)
-    (mul:rs (div:rs (mul:rs .2 (sub:rs z .1)) (add:rs z .1)) p)
-  =/  term1  (div:rs .1 (add:rs .1 (mul:rs .2 i)))
-  =/  term2  (mul:rs (sub:rs z .1) (sub:rs z .1))
-  =/  term3  (mul:rs (add:rs z .1) (add:rs z .1))
-  =/  term  (mul:rs term1 (pow-n (div:rs term2 term3) i))
-  $(i (add:rs i .1), p (add:rs p term), po p)
-++  powrs
-  ::  general power, based on logarithms
-  ::  x^n = exp(n ln x)
-  |=  [x=@rs n=@rs]
-  (exp (mul:rs n (ln x)))
-++  minrs
-  |=  [a=@rs b=@rs]
-  ?:  (lth:rs a b)  a  b
-++  normal
-  |=  u=@rs
-  =/  c0  .2.515517
-  =/  c1  .0.802853
-  =/  c2  .0.010328
-  =/  d1  .1.532788
-  =/  d2  .0.189268
-  =/  d3  .0.001308
-  =/  t  (sqt:rs (powrs (sub:rs .1 (ln (minrs u (sub:rs .1 u)))) .2))
-  =/  znum  :(add:rs c0 (mul:rs c1 t) (mul:rs c2 (mul:rs t t)))
-  =/  zden  :(add:rs .1 (mul:rs d1 t) (mul:rs d2 (mul:rs t t)) (mul:rs d3 (powrs t .3)))
-  (mul:rs (sgn (sub:rs u .0.5)) (sub:rs t (div:rs znum zden)))
-++  gen
-  |_  [z=@ud]
-  ++  lcg
-    |=  n=@ud                 :: n is the number of bits to return
-    =/  a  742.938.285        :: a is the multiplier
-    =/  e  31                 :: e is the exponent
-    =/  m  (sub (pow 2 e) 1)  :: modulus
-    =/  index  0
-    =/  accum  *@ub
-    |-  ^-  @ub
-    ?:  =(index n)  accum
-    %=  $
-      index  +(index)
-      z      (mod (mul a z) m)
-      accum  (cat 5 z accum)
-    ==
-  --
---
-```
--->
+*
 
-##  Hashing
+c\_2 = 0.010328
 
-A [hash function](https://en.wikipedia.org/wiki/Hash_function) is a tool
-which can take any input data and produce a fixed-length value that
-corresponds to it.  Hashes can be used for many purposes:
+*
 
-1. **Encryption**.  A [cryptographic hash
-   function](https://en.wikipedia.org/wiki/Cryptographic_hash_function)
-   leans into the one-way nature of a hash calculation to produce a
-   fast, practically-irreversible hash of a message.  They are
+d\_1 = 1.532788
+
+*
+
+d\_2 = 0.189268
+
+*
+
+d\_3 = 0.001308
+
+* Implement this formula in Hoon to produce normally-distributed random numbers.
+* How would you implement other random number generators?
+
+### Hashing
+
+A [hash function](https://en.wikipedia.org/wiki/Hash_function) is a tool\
+which can take any input data and produce a fixed-length value that\
+corresponds to it. Hashes can be used for many purposes:
+
+1. **Encryption**. A [cryptographic hash\
+   function](https://en.wikipedia.org/wiki/Cryptographic_hash_function)\
+   leans into the one-way nature of a hash calculation to produce a\
+   fast, practically-irreversible hash of a message. They are\
    foundational to modern cryptography.
-2. **Attestation or preregistration**.  If you wish to demonstrate that
-   you produced a particular message at a later time (including a
-   hypothesis or prediction), or that you solved a particular problem,
-   hashing the text of the solution and posting the hash publicly allows
+2. **Attestation or preregistration**. If you wish to demonstrate that\
+   you produced a particular message at a later time (including a\
+   hypothesis or prediction), or that you solved a particular problem,\
+   hashing the text of the solution and posting the hash publicly allows\
    you to verifiably timestamp your work.
-3. **Integrity verification**.  By comparing the hash of data to its
-   expected hash, you can verify that two copies of data are equivalent
-   (such as a downloaded executable file).  The
-   [MD5](https://en.wikipedia.org/wiki/MD5) hash algorithm is frequently
-   used for this purpose as
-   [`md5sum`](https://en.wikipedia.org/wiki/Md5sum).
-4. **Data lookup**.  [Hash
-   tables](https://en.wikipedia.org/wiki/Hash_table) are one way to
-   implement a key→value mapping, such as the functionality offered by
-   Hoon's {% tooltip label="++map"
-   href="/language/hoon/reference/stdlib/2o#map" /%}.
+3. **Integrity verification**. By comparing the hash of data to its\
+   expected hash, you can verify that two copies of data are equivalent\
+   (such as a downloaded executable file). The[MD5](https://en.wikipedia.org/wiki/MD5) hash algorithm is frequently\
+   used for this purpose as[`md5sum`](https://en.wikipedia.org/wiki/Md5sum).
+4. **Data lookup**. [Hash\
+   tables](https://en.wikipedia.org/wiki/Hash_table) are one way to\
+   implement a key→value mapping, such as the functionality offered by\
+   Hoon's \{% tooltip label="++map"\
+   href="/language/hoon/reference/stdlib/2o#map" /%\}.
 
-Theoretically, since the number of fixed-length hashes are finite, an
-infinite number of possible programs can yield any given hash.  This is
-called a [_hash
-collision_](https://en.wikipedia.org/wiki/Hash_collision), but for many
+Theoretically, since the number of fixed-length hashes are finite, an\
+infinite number of possible programs can yield any given hash. This is\
+called a [_hash_\
+_collision_](https://en.wikipedia.org/wiki/Hash_collision), but for many\
 practical purposes such a collision is extremely unlikely.
 
-### Hoon Operations
+#### Hoon Operations
 
-The Hoon standard library supports fast insecure hashing with {% tooltip
-label="++mug" href="/language/hoon/reference/stdlib/2e#mug" /%}, which
-accepts any {% tooltip label="noun" href="/glossary/noun" /%} and
+The Hoon standard library supports fast insecure hashing with \{% tooltip\
+label="++mug" href="/language/hoon/reference/stdlib/2e#mug" /%\}, which\
+accepts any
+
+and\
 produces an atom of the hash.
 
 ```hoon
@@ -1396,7 +1312,7 @@ produces an atom of the hash.
 0x6c91.8422
 ```
 
-`++mug` operates on the raw form of the noun however, without
+`++mug` operates on the raw form of the noun however, without\
 Hoon-specific metadata like aura:
 
 ```hoon
@@ -1407,19 +1323,18 @@ Hoon-specific metadata like aura:
 721.923.263
 ```
 
-Hoon also includes [SHA-256 and
-SHA-512](https://en.wikipedia.org/wiki/SHA-2)
-[tooling](/language/hoon/reference/stdlib/3d).
-({% tooltip label="++og" href="/language/hoon/reference/stdlib/3d#og"
-/%}, the random number generator, is based on SHA-256 hashing.)
+Hoon also includes [SHA-256 and\
+SHA-512](https://en.wikipedia.org/wiki/SHA-2)[tooling](../../../language/hoon/reference/stdlib/3d/).\
+(\{% tooltip label="++og" href="/language/hoon/reference/stdlib/3d#og"\
+/%\}, the random number generator, is based on SHA-256 hashing.)
 
-- {% tooltip label="++shax" href="/language/hoon/reference/stdlib/3d#shax" /%} produces
-    a hashed atom of 256 bits from any {% tooltip label="atom"
-    href="/glossary/atom" /%}.
+*   produces\
+    a hashed atom of 256 bits from any \{% tooltip label="atom"\
+    href="/glossary/atom" /%\}.
 
-    ```hoon > (shax 1)
+    ```hoon
     69.779.012.276.202.546.540.741.613.998.220.636.891.790.827.476.075.440.677.599.814.057.037.833.368.907
-    
+
     > `@ux`(shax 1)
     0x9a45.8577.3ce2.ccd7.a585.c331.d60a.60d1.e3b7.d28c.bb2e.de3b.c554.4534.2f12.f54b
 
@@ -1432,9 +1347,8 @@ SHA-512](https://en.wikipedia.org/wiki/SHA-2)
     > `@ux`(shax 1.000.000)
     0x84a4.929b.1d69.708e.d4b7.0fb8.ca97.cc85.c4a6.1aae.4596.f753.d0d2.6357.e7b9.eb0f
     ```
-
-- {% tooltip label="++shaz" href="/language/hoon/reference/stdlib/3d#shaz" /%} produces
-  a hashed atom of 512 bits from any atom.
+*   produces\
+    a hashed atom of 512 bits from any atom.
 
     ```hoon
     > (shaz 1)
@@ -1453,9 +1367,8 @@ SHA-512](https://en.wikipedia.org/wiki/SHA-2)
     0x4c13.ef8b.09cf.6e59.05c4.f203.71a4.9cec.3432.ba26.0174.f964.48f1.5475.b2dd.2c59.98c2.017c.9c03.cbea.9d5f.591b.ff23.bbff.b0ae.9c67.a4a9.dd8d.748a.8e14.c006.cbcc
     ```
 
-### Exercise:  Produce a secure password tool
+#### Exercise: Produce a secure password tool
 
-- Produce a basic secure password tool.  It should accept a password,
-  salt it (add a predetermined value to the password), and hash it.
-  _That_ hash is then compared to a reference hash to determine whether
+* Produce a basic secure password tool. It should accept a password,\
+  salt it (add a predetermined value to the password), and hash it._That_ hash is then compared to a reference hash to determine whether\
   or not the password is correct.

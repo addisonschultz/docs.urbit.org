@@ -1,159 +1,158 @@
-+++
-title = "~ sig · Hints"
+# sig
+
++++\
+title = "\~ sig · Hints"\
 weight = 90
 
-[glossaryEntry.sig]
-name = "sig"
-symbol = "~"
-usage = "Hints"
-desc = "Runes that use Nock <code>11</code> to pass non-semantic info to the interpreter."
+\[glossaryEntry.sig]\
+name = "sig"\
+symbol = "\~"\
+usage = "Hints"\
+desc = "Runes that use Nock `11` to pass non-semantic info to the interpreter."
 
-[glossaryEntry.siggar]
-name = "siggar"
-symbol = "~>"
-usage = "Hints"
-slug = "#-siggar"
-desc = "<code>[%sgbn p=$@(term [p=term q=hoon]) q=hoon]</code>: raw hint, applied"
+\[glossaryEntry.siggar]\
+name = "siggar"\
+symbol = "\~>"\
+usage = "Hints"\
+slug = "#-siggar"\
+desc = "`[%sgbn p=$@(term [p=term q=hoon]) q=hoon]`: raw hint, applied"
 
-[glossaryEntry.sigbar]
-name = "sigbar"
-symbol = "~|"
-usage = "Hints"
-slug = "#-sigbar"
-desc = "<code>[%sgbr p=hoon q=hoon]</code>: tracing printf."
+\[glossaryEntry.sigbar]\
+name = "sigbar"\
+symbol = "\~|"\
+usage = "Hints"\
+slug = "#-sigbar"\
+desc = "`[%sgbr p=hoon q=hoon]`: tracing printf."
 
-[glossaryEntry.sigbuc]
-name = "sigbuc"
-symbol = "~$"
-usage = "Hints"
-slug = "#-sigbuc"
-desc = "<code>[%sgbs p=term q=hoon]</code>: profiling hit counter."
+\[glossaryEntry.sigbuc]\
+name = "sigbuc"\
+symbol = "\~$"\
+usage = "Hints"\
+slug = "#-sigbuc"\
+desc = "`[%sgbs p=term q=hoon]`: profiling hit counter."
 
-[glossaryEntry.sigcab]
-name = "sigcab"
-symbol = "~_"
-usage = "Hints"
-slug = "#_-sigcab"
-desc = "<code>[%sgcb p=hoon q=hoon]</code>: user-formatted tracing printf."
+\[glossaryEntry.sigcab]\
+name = "sigcab"\
+symbol = "\~_"_\
+_usage = "Hints"_\
+_slug = "#_-sigcab"\
+desc = "`[%sgcb p=hoon q=hoon]`: user-formatted tracing printf."
 
-[glossaryEntry.sigcen]
-name = "sigcen"
-symbol = "~%"
-usage = "Hints"
-slug = "#-sigcen"
-desc = "<code>[%sgcn p=term q=wing r=(list [term hoon]) s=hoon]</code>: jet registration."
+\[glossaryEntry.sigcen]\
+name = "sigcen"\
+symbol = "\~%"\
+usage = "Hints"\
+slug = "#-sigcen"\
+desc = "`[%sgcn p=term q=wing r=(list [term hoon]) s=hoon]`: jet registration."
 
-[glossaryEntry.siggal]
-name = "siggal"
-symbol = "~<"
-usage = "Hints"
-slug = "#-siggal"
-desc = "<code>[%sgld p=$@(term [p=term q=hoon]) q=hoon]</code>: raw hint, applied to product."
+\[glossaryEntry.siggal]\
+name = "siggal"\
+symbol = "\~<"\
+usage = "Hints"\
+slug = "#-siggal"\
+desc = "`[%sgld p=$@(term [p=term q=hoon]) q=hoon]`: raw hint, applied to product."
 
-[glossaryEntry.siglus]
-name = "siglus"
-symbol = "~+"
-usage = "Hints"
-slug = "#-siglus"
-desc = "<code>[%sgls p=hoon]</code>: cache a computation."
+\[glossaryEntry.siglus]\
+name = "siglus"\
+symbol = "\~+"\
+usage = "Hints"\
+slug = "#-siglus"\
+desc = "`[%sgls p=hoon]`: cache a computation."
 
-[glossaryEntry.sigfas]
-name = "sigfas"
-symbol = "~/"
-usage = "Hints"
-slug = "#-sigfas"
-desc = "<code>[%sgnt p=term q=hoon]</code>: jet registration for gate with"
+\[glossaryEntry.sigfas]\
+name = "sigfas"\
+symbol = "\~/"\
+usage = "Hints"\
+slug = "#-sigfas"\
+desc = "`[%sgnt p=term q=hoon]`: jet registration for gate with"
 
-[glossaryEntry.sigpam]
-name = "sigpam"
-symbol = "~&"
-usage = "Hints"
-slug = "#-sigpam"
-desc = "<code>[%sgpd p=hoon q=hoon]</code>: debugging printf."
+\[glossaryEntry.sigpam]\
+name = "sigpam"\
+symbol = "\~&"\
+usage = "Hints"\
+slug = "#-sigpam"\
+desc = "`[%sgpd p=hoon q=hoon]`: debugging printf."
 
-[glossaryEntry.sigtis]
-name = "sigtis"
-symbol = "~="
-usage = "Hints"
-slug = "#-sigtis"
-desc = "<code>[%sgts p=hoon q=hoon]</code>: detect duplicate."
+\[glossaryEntry.sigtis]\
+name = "sigtis"\
+symbol = "\~="\
+usage = "Hints"\
+slug = "#-sigtis"\
+desc = "`[%sgts p=hoon q=hoon]`: detect duplicate."
 
-[glossaryEntry.sigwut]
-name = "sigwut"
-symbol = "~?"
-usage = "Hints"
-slug = "#-sigwut"
-desc = "<code>[%sgwt p=hoon q=hoon r=hoon]</code>: conditional debug printf."
+\[glossaryEntry.sigwut]\
+name = "sigwut"\
+symbol = "\~?"\
+usage = "Hints"\
+slug = "#-sigwut"\
+desc = "`[%sgwt p=hoon q=hoon r=hoon]`: conditional debug printf."
 
-[glossaryEntry.sigzap]
-name = "sigzap"
-symbol = "~!"
-usage = "Hints"
-slug = "#-sigzap"
-desc = "<code>[%sgzp p=hoon q=hoon]</code>: print type on compilation fail."
+\[glossaryEntry.sigzap]\
+name = "sigzap"\
+symbol = "\~!"\
+usage = "Hints"\
+slug = "#-sigzap"\
+desc = "`[%sgzp p=hoon q=hoon]`: print type on compilation fail."
 
 +++
 
-Runes that use Nock `11` to pass non-semantic info to the interpreter. A
-mnemonic to remember what sig runes are for is "we're *sig*naling some
+Runes that use Nock `11` to pass non-semantic info to the interpreter. A\
+mnemonic to remember what sig runes are for is "we're _si&#x67;_&#x6E;aling some\
 information to the interpreter".
 
-## `~>` "siggar"
+### `~>` "siggar"
 
 Raw hint, applied to computation.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~>  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~>(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sggr p=$@(term [p=term q=hoon]) q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `q`.
 
-#### Semantics
+**Semantics**
 
-`p` may either be a single `%term` or a pair of `[term hoon]`, the latter of
-which may optionally be be written `%foo.some-hoon`. `p` will be passed to the
+`p` may either be a single `%term` or a pair of `[term hoon]`, the latter of\
+which may optionally be be written `%foo.some-hoon`. `p` will be passed to the\
 interpreter and `q` will be evaluated and its result produced like normal.
 
-#### Discussion
+**Discussion**
 
-Hoon has no way of telling what hints are used and what aren't.
+Hoon has no way of telling what hints are used and what aren't.\
 Hints are all conventions at the interpreter level.
 
-#### Examples
+**Examples**
 
 ```
 > ~>(%a 42)
@@ -170,57 +169,54 @@ Running the compiler:
 [%11 p=[p=97 q=[%4 p=[%1 p=2]]] q=[%1 p=42]]
 ```
 
----
+***
 
-## `~|` "sigbar"
+### `~|` "sigbar"
 
 Tracing printf.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~|  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~|(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgbr p=hoon q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `q`.
 
-#### Convention
+**Convention**
 
 Prettyprints `p` in stack trace if `q` crashes.
 
-#### Examples
+**Examples**
 
 ```
 > ~|('sample error message' !!)
@@ -233,59 +229,55 @@ dojo: hoon expression failed
 dojo: hoon expression failed
 ```
 
----
+***
 
-## `~$` "sigbuc"
+### `~$` "sigbuc"
 
 Profiling hit counter.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~&  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~&(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgbc p=term q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `q`.
 
-#### Discussion
+**Discussion**
 
-If profiling is on, adds 1 to the hit counter `p`, which is a `term` like
-`%foo`. Profiling is enabled by passing the `-P` flag to the `urbit` binary.
+If profiling is on, adds 1 to the hit counter `p`, which is a `term` like`%foo`. Profiling is enabled by passing the `-P` flag to the `urbit` binary.\
 Profiling results are saved in `/path/to/pier/.urb/put/profile/~some.date.txt`.
 
-#### Examples
+**Examples**
 
 ```
 > ~$(%foo 3)
@@ -305,68 +297,65 @@ Assuming we have the binary running with the `-P` flag, if we do this:
 0
 ```
 
-...then look in `/path/to/pier/.urb/put/profile/~some.date.txt`, we'll see this
+...then look in `/path/to/pier/.urb/put/profile/~some.date.txt`, we'll see this\
 line near the top of the file:
 
 ```
 my-hit-counter: 42
 ```
 
----
+***
 
-## `~_` "sigcab"
+### `~_` "sigcab"
 
 User-formatted tracing printf.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~_  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~_(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgcb p=hoon q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `q`.
 
-#### Convention
+**Convention**
 
 Shows `p` in stacktrace if `q` crashes.
 
-#### Discussion
+**Discussion**
 
 `p` must produce a `tank` (pretty-print source).
 
-#### Examples
+**Examples**
 
 ```
 > ~_([%leaf "sample error message"] !!)
@@ -379,27 +368,25 @@ sample error message
 dojo: hoon expression failed
 ```
 
----
+***
 
-## `~%` "sigcen"
+### `~%` "sigcen"
 
 Jet registration.
 
-#### Syntax
+**Syntax**
 
-Four arguments. Two fixed arguments, then a third which may be `~` if empty or
-else a variable number of pairs sandwiched between two `==`s, then a fourth
+Four arguments. Two fixed arguments, then a third which may be `~` if empty or\
+else a variable number of pairs sandwiched between two `==`s, then a fourth\
 fixed argument.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~%  p  q
     ==
       r1a  r1b
@@ -409,78 +396,77 @@ fixed argument.
   s
   ```
 
----
+***
 
-- Wide
-- None.
+* Wide
+* None.
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgcn p=chum q=hoon r=tyre s=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `s`.
 
-#### Convention
+**Convention**
 
-Register a core with name `p`, with parent at leg `q`, exporting
+Register a core with name `p`, with parent at leg `q`, exporting\
 the named formulas `r`, constructed by `s`.
 
-#### Discussion
+**Discussion**
 
-`~%` is for registering cores. A registered core declares its
-formal identity to the interpreter, which may or may not be able
+`~%` is for registering cores. A registered core declares its\
+formal identity to the interpreter, which may or may not be able\
 to recognize and/or accelerate it.
 
-Registered cores are organized in a containment hierarchy.
-The parent core is at any leg within the child core. When we
-register a core, we state the leg to its parent, in the form of
-wing `q`. We assume the parent is already registered -- as it
-must be, if (a) we registered it on creation, (b) the child was
+Registered cores are organized in a containment hierarchy.\
+The parent core is at any leg within the child core. When we\
+register a core, we state the leg to its parent, in the form of\
+wing `q`. We assume the parent is already registered -- as it\
+must be, if (a) we registered it on creation, (b) the child was\
 created by an arm defined on the parent.
 
-(Cores are actually managed by their formula/battery. Any
-function call will create a new core with a new sample, but
-batteries are constant. But it is not sufficient to match the
-battery -- matching the semantics constrains the payload as well,
-since the semantics of a battery may depend on any parent core
+(Cores are actually managed by their formula/battery. Any\
+function call will create a new core with a new sample, but\
+batteries are constant. But it is not sufficient to match the\
+battery -- matching the semantics constrains the payload as well,\
+since the semantics of a battery may depend on any parent core\
 and/or payload constant.)
 
-The purpose of registration is always performance-related. It
-may involve (a) a special-purpose optimizer or "jet", written
-for a specific core and checked with a Merkle hash; (b) a
-general-purpose hotspot optimizer or "JIT"; or (c) merely a
+The purpose of registration is always performance-related. It\
+may involve (a) a special-purpose optimizer or "jet", written\
+for a specific core and checked with a Merkle hash; (b) a\
+general-purpose hotspot optimizer or "JIT"; or (c) merely a\
 hotspot declaration for profiling.
 
-As always with hints, the programmer has no idea which of (a),
-(b), and (c) will be applied. Use `~%`
-indiscriminately on all hotspots, bottlenecks, etc, real or
+As always with hints, the programmer has no idea which of (a),\
+(b), and (c) will be applied. Use `~%`\
+indiscriminately on all hotspots, bottlenecks, etc, real or\
 suspected.
 
-The list `r` is a way for the Hoon programmer to help jet
-implementors with named Nock formulas that act on the core.
-In complex systems, jet implementations are often partial and
+The list `r` is a way for the Hoon programmer to help jet\
+implementors with named Nock formulas that act on the core.\
+In complex systems, jet implementations are often partial and\
 want to call back into userspace.
 
-The child core contains the parent, of course. When we register
-a core, we state the leg to its parent, in the form of wing `q`.
-We assume that the parent -- any core within the payload -- is
+The child core contains the parent, of course. When we register\
+a core, we state the leg to its parent, in the form of wing `q`.\
+We assume that the parent -- any core within the payload -- is\
 already registered.
 
 `p` is the name of this core within its parent; `q` is the leg
 
 Registers a jet in core `s` so that it can be called when that code is run.
 
-#### Examples
+**Examples**
 
 Here's the beginning of the AES core in `zuse.hoon`:
 
@@ -499,62 +485,59 @@ Here's the beginning of the AES core in `zuse.hoon`:
 
 Here we label the entire `++aes` core for optimization.
 
----
+***
 
-## `~<` "siggal"
+### `~<` "siggal"
 
 Raw hint, applied to product.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~<  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~<(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-`p` may either be a a `term` or a pair of `[term hoon]`. If it's the latter, `p`
+`p` may either be a a `term` or a pair of `[term hoon]`. If it's the latter, `p`\
 may optionally be written as `%foo.some-hoon`.
 
-#### AST
+**AST**
 
 ```hoon
 [%sggl p=$@(term [p=term q=hoon]) q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `q`.
 
-#### Discussion
+**Discussion**
 
-`~<` is only used for jet hints ([`~/`](#-sigfas) and [`~%`](#-sigcen)) at the
-moment; we are not telling the interpreter something about the computation we're
+`~<` is only used for jet hints ([`~/`](sig.md#-sigfas) and [`~%`](sig.md#-sigcen)) at the\
+moment; we are not telling the interpreter something about the computation we're\
 about to perform, but rather about its product.
 
-#### Examples
+**Examples**
 
 ```
 > (make '~<(%a 42)')
@@ -563,57 +546,54 @@ about to perform, but rather about its product.
 [%7 p=[%1 p=42] q=[%11 p=[p=97 q=[%4 p=[%0 p=1]]] q=[%0 p=1]]]
 ```
 
----
+***
 
-## `~+` "siglus"
+### `~+` "siglus"
 
 Cache a computation.
 
-#### Syntax
+**Syntax**
 
 One argument, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~+  p
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~+(p)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgls p=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `p`.
 
-#### Convention
+**Convention**
 
-Caches the formula and subject of `p` in a local cache (generally
+Caches the formula and subject of `p` in a local cache (generally\
 transient in the current event).
 
-#### Examples
+**Examples**
 
 This may pause for a second:
 
@@ -636,55 +616,52 @@ This should work fine:
 573.147.844.013.817.084.101
 ```
 
----
+***
 
-## `~/` "sigfas"
+### `~/` "sigfas"
 
 Jet registration for gate with registered context.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~/  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~/(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgfs p=term q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 ```hoon
 ~%(p +7 ~ q)
 ```
 
-#### Examples
+**Examples**
 
 From the kernel:
 
@@ -697,67 +674,63 @@ From the kernel:
   $(a (dec a), b +(b))
 ```
 
----
+***
 
-## `~&` "sigpam"
+### `~&` "sigpam"
 
 Debugging printf.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~&  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~&(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgpm p=hoon q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `q`.
 
-#### Product
+**Product**
 
 Pretty-prints `p` on the console before computing `q`.
 
-#### Discussion
+**Discussion**
 
-This rune has no semantic effect beyond the Hoon expression `q`. It's used
+This rune has no semantic effect beyond the Hoon expression `q`. It's used\
 solely to create a side-effect: printing the value of `p` to the console.
 
 It's most useful for debugging programs.
 
-A logging level can be specified by including `>` markers, i.e. `>`, `>>`,
-`>>>`.
+A logging level can be specified by including `>` markers, i.e. `>`, `>>`,`>>>`.
 
-#### Examples
+**Examples**
 
 ```
 > ~&('halp' ~)
@@ -775,65 +748,61 @@ A logging level can be specified by including `>` markers, i.e. `>`, `>>`,
 ~
 ```
 
----
+***
 
-## `~=` "sigtis"
+### `~=` "sigtis"
 
 Detect duplicate.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~=  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~=(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgts p=hoon q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `q`.
 
-#### Convention
+**Convention**
 
 If `p` equals `q`, produce `p` instead of `q`.
 
-#### Discussion
+**Discussion**
 
-Duplicate nouns are especially bad news in Hoon, because comparing them
+Duplicate nouns are especially bad news in Hoon, because comparing them\
 takes O(n) time. Use `~=` to avoid this inefficiency.
 
-#### Examples
+**Examples**
 
-This code traverses a tree and replaces all instances of `32` with
-`320`:
+This code traverses a tree and replaces all instances of `32` with`320`:
 
 ```
 > =foo |=  a=(tree)
@@ -845,58 +814,55 @@ This code traverses a tree and replaces all instances of `32` with
 
 Without `~=`, it would build a copy of a completely unchanged tree. Sad!
 
----
+***
 
-## `~?` "sigwut"
+### `~?` "sigwut"
 
 Conditional debug printf.
 
-#### Syntax
+**Syntax**
 
 Three arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~?  p
     q
   r
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~?(p q r)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgwt p=hoon q=hoon r=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `r`.
 
-#### Convention
+**Convention**
 
 If `p` is true, prettyprints `q` on the console before computing `r`.
 
-#### Examples
+**Examples**
 
 ```
 > ~?((gth 1 2) 'oops' ~)
@@ -918,57 +884,54 @@ If `p` is true, prettyprints `q` on the console before computing `r`.
 ~
 ```
 
----
+***
 
-## `~!` "sigzap"
+### `~!` "sigzap"
 
 Print type on compilation fail.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   ~!  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   ~!(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%sgzp p=hoon q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 `q`.
 
-#### Convention
+**Convention**
 
 If compilation of `q` fails, prints the type of `p` in the trace.
 
-#### Examples
+**Examples**
 
 ```
 > a

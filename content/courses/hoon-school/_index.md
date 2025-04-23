@@ -1,108 +1,102 @@
+# \_index
+
++++\
+title = "Hoon School"\
+weight = 5\
+sort\_by = "weight"\
+insert\_anchor\_links = "right"\
 +++
-title = "Hoon School"
-weight = 5
-sort_by = "weight"
-insert_anchor_links = "right"
-+++
 
-Hoon School is designed to teach you Hoon without assuming you have an
-extensive programming background.  You should be able to following most
-of it even if you have no programming experience at all yet, though of
-course experience helps.  We strongly encourage you to try out all the
-examples of each lesson.  Hoon School is meant for the beginner, but
-it's not meant to be skimmed.  Each lesson consists of:
+Hoon School is designed to teach you Hoon without assuming you have an\
+extensive programming background. You should be able to following most\
+of it even if you have no programming experience at all yet, though of\
+course experience helps. We strongly encourage you to try out all the\
+examples of each lesson. Hoon School is meant for the beginner, but\
+it's not meant to be skimmed. Each lesson consists of:
 
-- **Explanations**, which are prose-heavy commentary on the Hoon fundamentals.
+* **Explanations**, which are prose-heavy commentary on the Hoon fundamentals.
+* **Exercises**, which challenge you to clarify or expand your own understanding in practice.
+* **Tutorials**, which are line-by-line commentary on example programs.
 
-- **Exercises**, which challenge you to clarify or expand your own understanding in practice.
+There are two flavors of Hoon School: the Hoon School Live cohort\
+class, in which you work through lessons with other students and receive\
+a certification (`%gora`) for completion, and these written Hoon School\
+docs. To sign up for a future cohort of Hoon School Live, please [let\
+us know of your interest here](../../../courses/) and we'll be in touch.
 
-- **Tutorials**, which are line-by-line commentary on example programs.
+### Why Hoon?
 
-There are two flavors of Hoon School:  the Hoon School Live cohort
-class, in which you work through lessons with other students and receive
-a certification (`%gora`) for completion, and these written Hoon School
-docs.  To sign up for a future cohort of Hoon School Live, please [let
-us know of your interest here](/courses) and we'll be in touch.
-
-
-##  Why Hoon?
-
-The short version is that Hoon uses Urbit's provisions and protocols to
-enable very fast application development with shared primitives,
+The short version is that Hoon uses Urbit's provisions and protocols to\
+enable very fast application development with shared primitives,\
 sensible affordances, and straightforward distribution.
 
-Urbit consists of an identity protocol ({% tooltip label="\"Azimuth\""
-href="/glossary/azimuth" /%}, or “Urbit ID”) and a system protocol ({%
-tooltip label="\"Arvo\"" href="/glossary/arvo" /%}, or “Urbit OS”).
+Urbit consists of an identity protocol (\{% tooltip label=""Azimuth""\
+href="/glossary/azimuth" /%\}, or “Urbit ID”) and a system protocol (\{%\
+tooltip label=""Arvo"" href="/glossary/arvo" /%\}, or “Urbit OS”).\
 These two parts work hand-in-hand to build your hundred-year computer.
 
-1. **Urbit ID (Azimuth)** is a general-purpose public-key infrastructure
-   (PKI) on the Ethereum blockchain, used as a platform for Urbit
-   identities.  It provides a system of scarce and immutable identities
+1. **Urbit ID (Azimuth)** is a general-purpose public-key infrastructure\
+   (PKI) on the Ethereum blockchain, used as a platform for Urbit\
+   identities. It provides a system of scarce and immutable identities\
    which are cryptographically secure.
-
-2. **Urbit OS (Arvo)** is an operating system which provides the
-   software for the personal server platform that constitutes the
-   day-to-day usage of Urbit.  Arvo works over a
-   [peer-to-peer](https://en.wikipedia.org/wiki/Peer-to-peer)
-   [end-to-end-encrypted](https://en.wikipedia.org/wiki/End-to-end_encryption)
+2. **Urbit OS (Arvo)** is an operating system which provides the\
+   software for the personal server platform that constitutes the\
+   day-to-day usage of Urbit. Arvo works over a[peer-to-peer](https://en.wikipedia.org/wiki/Peer-to-peer)[end-to-end-encrypted](https://en.wikipedia.org/wiki/End-to-end_encryption)\
    network to interact with other Urbit ships (or unique instances).
 
-Arvo is an axiomatic operating system which restricts itself to pure
-mathematical functions, making it
-[deterministic](https://en.wikipedia.org/wiki/Deterministic_algorithm)
-and
-[functional-as-in-programming](https://en.wikipedia.org/wiki/Functional_programming).
-Such strong guarantees require an operating protocol, the [Nock virtual
-machine](/language/nock/reference/definition), which will be persistent across
-hardware changes and always provide an upgrade path for necessary
+Arvo is an axiomatic operating system which restricts itself to pure\
+mathematical functions, making it[deterministic](https://en.wikipedia.org/wiki/Deterministic_algorithm)\
+and[functional-as-in-programming](https://en.wikipedia.org/wiki/Functional_programming).\
+Such strong guarantees require an operating protocol, the [Nock virtual\
+machine](../../../language/nock/reference/definition/), which will be persistent across\
+hardware changes and always provide an upgrade path for necessary\
 changes.
 
-It's hard to write a purely functional operating system on hardware
-which doesn't make such guarantees, so Urbit OS uses a new language,
-Hoon, which compiles to Nock and hews to the necessary conceptual models
-for a platform like Urbit.  [The Hoon overview](/language/hoon) covers
-more of the high-level design decisions behind the language, as does
-[developer ~rovnys-ricfer's
+It's hard to write a purely functional operating system on hardware\
+which doesn't make such guarantees, so Urbit OS uses a new language,\
+Hoon, which compiles to Nock and hews to the necessary conceptual models\
+for a platform like Urbit. [The Hoon overview](../../../language/hoon/) covers\
+more of the high-level design decisions behind the language, as does[developer \~rovnys-ricfer's\
 explanation](https://urbit.org/blog/why-hoon/).
 
-Hoon School introduces and explains the fundamental concepts you need in
-order to understand Hoon's semantics.  It then introduces a number of
-key examples and higher-order abstractions which will make you a more
+Hoon School introduces and explains the fundamental concepts you need in\
+order to understand Hoon's semantics. It then introduces a number of\
+key examples and higher-order abstractions which will make you a more\
 fluent Hoon programmer.
 
-Once you have completed Hoon School, you should work through [App
-School](/courses/app-school) to learn how to build full applications on
+Once you have completed Hoon School, you should work through [App\
+School](../../../courses/app-school/) to learn how to build full applications on\
 Urbit.
 
-##  Environment Setup
+### Environment Setup
 
-An Urbit ship is a particular realization of an _identity_ and an _event
-log_ or _state_.  Both of these are necessary.
+An Urbit ship is a particular realization of an _identity_ and an _event_\
+_log_ or _state_. Both of these are necessary.
 
-Since live network identities (_liveships_) are finite, scarce, and
-valuable, most developers prefer to write new code using fake identities
-(_fakeships_ or _fakezods_).  A fakeship is also different from a comet,
+Since live network identities (_liveships_) are finite, scarce, and\
+valuable, most developers prefer to write new code using fake identities\
+(_fakeships_ or _fakezods_). A fakeship is also different from a comet,\
 which is an unkeyed liveship.
 
-Two fakeships can communicate with each other on the same machine, but
-have no awareness of the broader Urbit network.  We won't need to use
-this capability in Hoon School Live, but it will be helpful later when
+Two fakeships can communicate with each other on the same machine, but\
+have no awareness of the broader Urbit network. We won't need to use\
+this capability in Hoon School Live, but it will be helpful later when\
 you start developing networked apps.
 
-Before beginning, you'll need to get a development ship running and
-configure an appropriate editor.  See the [Environment
-Setup](/courses/environment) guide for details.
+Before beginning, you'll need to get a development ship running and\
+configure an appropriate editor. See the [Environment\
+Setup](../../../courses/environment/) guide for details.
 
 Once you have a `dojo>` prompt, the system is ready to go and waiting on input.
 
-##  Getting started
+### Getting started
 
-Once you've created your development ship, let's try a basic command.
-Type `%-  add  [2 2]` at the prompt and hit `Return`.  (Note the double
-spaces before and after `add`.)  Your screen now shows:
+Once you've created your development ship, let's try a basic command.\
+Type `%- add [2 2]` at the prompt and hit `Return`. (Note the double\
+spaces before and after `add`.) Your screen now shows:
 
-```hoon {% copy=true %}
+```hoon
+
 fake: ~zod
 ames: czar: ~zod on 31337 (localhost only)
 http: live (insecure, public) on 80
@@ -112,167 +106,202 @@ http: live (insecure, loopback) on 12321
 ~zod:dojo>
 ```
 
-You just used a function from the Hoon standard library, `add`, which
-for reasons that will become clear later is frequently written {%
-tooltip label="++add" href="/language/hoon/reference/stdlib/1a#add" /%}.
-Next, quit Urbit by entering {% tooltip label="|exit"
-href="/manual/os/dojo-tools#exit" /%} :
+You just used a function from the Hoon standard library, `add`, which\
+for reasons that will become clear later is frequently written \{%\
+tooltip label="++add" href="/language/hoon/reference/stdlib/1a#add" /%\}.\
+Next, quit Urbit by entering \{% tooltip label="|exit"\
+href="/manual/os/dojo-tools#exit" /%\} :
 
-```hoon {% copy=true %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 > %-  add  [2 2]
 4
 ~zod:dojo> |exit
 $
 ```
 
-Your ship isn't running anymore and you're back at your computer's
-normal terminal prompt.  If your ship is ~zod, then you can restart the
+Your ship isn't running anymore and you're back at your computer's\
+normal terminal prompt. If your ship is \~zod, then you can restart the\
 ship by typing:
 
-```hoon {% copy=true %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 urbit zod
 ```
 
-You've already used a standard library function to produce one value, in
-the Dojo. Now that your ship is running again, let's try another. Enter
+You've already used a standard library function to produce one value, in\
+the Dojo. Now that your ship is running again, let's try another. Enter\
 the number `17`.
 
-(We won't show the `~zod:dojo>` prompt from here on out.  We'll just
+(We won't show the `~zod:dojo>` prompt from here on out. We'll just\
 show the echoed command along with its result.)
 
 You'll see:
 
-```hoon {% copy=true %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 > 17
 17
 ```
 
-You asked Dojo to evaluate `17` and it echoed the number back at you.
-This value is a {% tooltip label="noun" href="/glossary/noun" /%}. We'll
+You asked Dojo to evaluate `17` and it echoed the number back at you.\
+This value is a
+
+. We'll\
 talk more about nouns in the next lesson.
 
-Basically, every Hoon expression operates on the values it is given
-until it reduces to some form that can't evaluate any farther.  This is
+Basically, every Hoon expression operates on the values it is given\
+until it reduces to some form that can't evaluate any farther. This is\
 then returned as the result of the evaluation.
 
 One more:
 
-```hoon {% copy=true %}
+```hoon
+
 > :-  1  2
 [1 2]
 ```
 
-This `:-` rune takes two values and composes them into a {% tooltip
-label="cell" href="/glossary/cell" /%}, a pair of values.
+This `:-` rune takes two values and composes them into a \{% tooltip\
+label="cell" href="/glossary/cell" /%\}, a pair of values.
 
+### Pronouncing Hoon
 
-##  Pronouncing Hoon
+Hoon uses
 
-Hoon uses {% tooltip label="runes" href="/glossary/rune" /%}, or
-two-character ASCII symbols, to describe its structure.  (These are
-analogous to keywords in other programming languages.)  Because there
-has not really been a standard way of pronouncing, say, `#` (hash,
-pound, number, sharp, hatch) or `!` (exclamation point, bang, shriek,
-pling), the authors of Urbit decided to adopt a one-syllable mnemonic to
+, or\
+two-character ASCII symbols, to describe its structure. (These are\
+analogous to keywords in other programming languages.) Because there\
+has not really been a standard way of pronouncing, say, `#` (hash,\
+pound, number, sharp, hatch) or `!` (exclamation point, bang, shriek,\
+pling), the authors of Urbit decided to adopt a one-syllable mnemonic to\
 uniquely refer to each.
 
-It is highly advisable for you to learn these pronunciations, as the
-documentation and other developers employ them frequently.  For
-instance, a rune like `|=` is called a “bartis”, and you will find it
-designated as such in the docs, in the source code, and among the
+It is highly advisable for you to learn these pronunciations, as the\
+documentation and other developers employ them frequently. For\
+instance, a rune like `|=` is called a “bartis”, and you will find it\
+designated as such in the docs, in the source code, and among the\
 developers.
 
-{% table %}
-- Name
-- Character
-- Name
-- Character
-- Name
-- Character
----
-- `ace`
-- `␣`
-- `gap`
-- `␣␣`, `\n` 
-- `pat` 
-- `@`
----
-- `bar`
-- `|`
-- `gar`
-- `>`
-- `sel`
-- `[`
----
-- `bas`
-- `\`
-- `hax`
-- `#`
-- `ser`
-- `]`
----
-- `buc`
-- `$`
-- `hep`
-- `-`
-- `sig`
-- `~`
----
-- `cab`
-- `_`
-- `kel`
-- `{`
-- `soq`
-- `'`
----
-- `cen`
-- `%`
-- `ker`
-- `}`
-- `tar`
-- `*`
----
-- `col`
-- `:`
-- `ket`
-- `^`
-- `tic`
-- `` ` ``
----
-- `com`
-- `,`
-- `lus`
-- `+`
-- `tis`
-- `=`
----
-- `doq`
-- `"`
-- `mic`
-- `;`
-- `wut`
-- `?`
----
-- `dot`
-- `.`
-- `pal`
-- `(`
-- `zap`
-- `!`
----
-- `fas`
-- `/`
-- `pam`
-- `&`
-- `gal`
-- `<`
----
-- `par`
-- `)`
-{% /table %}
+* Name
+* Character
+* Name
+* Character
+* Name
+* Character
 
-Note that the list includes two separate whitespace forms: `ace` for a
-single space `␣`; `gap` is either two or more spaces `␣␣` or a line
-break `\n`.  In Hoon, the only whitespace significance is the
-distinction between `ace` and `gap`—i.e., the distinction between one
+***
+
+* `ace`
+* `␣`
+* `gap`
+* `␣␣`,&#x20;
+* `pat`
+* `@`
+
+***
+
+* `bar`
+* `|`
+* `gar`
+* `>`
+* `sel`
+* `[`
+
+***
+
+* `bas`
+* `\`
+* `hax`
+* `#`
+* `ser`
+* `]`
+
+***
+
+* `buc`
+* `$`
+* `hep`
+* `-`
+* `sig`
+* `~`
+
+***
+
+* `cab`
+* `_`
+* `kel`
+* `{`
+* `soq`
+* `'`
+
+***
+
+* `cen`
+* `%`
+* `ker`
+* `}`
+* `tar`
+* `*`
+
+***
+
+* `col`
+* `:`
+* `ket`
+* `^`
+* `tic`
+* `` ` ``
+
+***
+
+* `com`
+* `,`
+* `lus`
+* `+`
+* `tis`
+* `=`
+
+***
+
+* `doq`
+* `"`
+* `mic`
+* `;`
+* `wut`
+* `?`
+
+***
+
+* `dot`
+* `.`
+* `pal`
+* `(`
+* `zap`
+* `!`
+
+***
+
+* `fas`
+* `/`
+* `pam`
+* `&`
+* `gal`
+* `<`
+
+***
+
+* `par`
+* `)`
+
+Note that the list includes two separate whitespace forms: `ace` for a\
+single space `␣`; `gap` is either two or more spaces `␣␣` or a line\
+break . In Hoon, the only whitespace significance is the\
+distinction between `ace` and `gap`—i.e., the distinction between one\
 space and more than one.

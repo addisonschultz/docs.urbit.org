@@ -1,102 +1,102 @@
-+++
-title = "% cen · Calls"
+# cen
+
++++\
+title = "% cen · Calls"\
 weight = 30
 
-[glossaryEntry.cen]
-name = "cen"
-symbol = "%"
-usage = "Calls"
+\[glossaryEntry.cen]\
+name = "cen"\
+symbol = "%"\
+usage = "Calls"\
 desc = "Runes used for making function calls in Hoon."
 
-[glossaryEntry.cencab]
-name = "cencab"
-symbol = "%_"
-usage = "Calls"
-slug = "#_-cencab"
+\[glossaryEntry.cencab]\
+name = "cencab"\
+symbol = "%_"_\
+_usage = "Calls"_\
+_slug = "#_-cencab"\
 desc = "Resolve a wing with changes, preserving type."
 
-[glossaryEntry.cencol]
-name = "cencol"
-symbol = "%:"
-usage = "Calls"
-slug = "#-cencol"
+\[glossaryEntry.cencol]\
+name = "cencol"\
+symbol = "%:"\
+usage = "Calls"\
+slug = "#-cencol"\
 desc = "Call a gate with many arguments."
 
-[glossaryEntry.cendot]
-name = "cendot"
-symbol = "%."
-usage = "Calls"
-slug = "#-cendot"
+\[glossaryEntry.cendot]\
+name = "cendot"\
+symbol = "%."\
+usage = "Calls"\
+slug = "#-cendot"\
 desc = "Call a gate (function), inverted."
 
-[glossaryEntry.cenhep]
-name = "cenhep"
-symbol = "%-"
-usage = "Calls"
-slug = "#-cenhep"
+\[glossaryEntry.cenhep]\
+name = "cenhep"\
+symbol = "%-"\
+usage = "Calls"\
+slug = "#-cenhep"\
 desc = "Call a gate (function)."
 
-[glossaryEntry.cenket]
-name = "cenket"
-symbol = "%^"
-usage = "Calls"
-slug = "#-cenket"
+\[glossaryEntry.cenket]\
+name = "cenket"\
+symbol = "%^"\
+usage = "Calls"\
+slug = "#-cenket"\
 desc = "Call gate with triple sample."
 
-[glossaryEntry.cenlus]
-name = "cenlus"
-symbol = "%+"
-usage = "Calls"
-slug = "#-cenlus"
+\[glossaryEntry.cenlus]\
+name = "cenlus"\
+symbol = "%+"\
+usage = "Calls"\
+slug = "#-cenlus"\
 desc = "Call gate with a cell sample."
 
-[glossaryEntry.censig]
-name = "censig"
-symbol = "%~"
-usage = "Calls"
-slug = "#-censig"
+\[glossaryEntry.censig]\
+name = "censig"\
+symbol = "%\~"\
+usage = "Calls"\
+slug = "#-censig"\
 desc = "Evaluate an arm in a door."
 
-[glossaryEntry.centar]
-name = "centar"
-symbol = "%*"
-usage = "Calls"
-slug = "#-centar"
+\[glossaryEntry.centar]\
+name = "centar"\
+symbol = "%\*"\
+usage = "Calls"\
+slug = "#-centar"\
 desc = "Evaluate an expression, then resolve a wing with changes."
 
-[glossaryEntry.centis]
-name = "centis"
-symbol = "%="
-usage = "Calls"
-slug = "#-centis"
+\[glossaryEntry.centis]\
+name = "centis"\
+symbol = "%="\
+usage = "Calls"\
+slug = "#-centis"\
 desc = "Resolve a wing with changes."
 
 +++
 
-The `%` family of runes is used for making 'function calls' in Hoon. To be more
-precise, these runes evaluate the `$` arm in cores, usually after modifying the
-sample. (The default sample is replaced with the input values given in the
+The `%` family of runes is used for making 'function calls' in Hoon. To be more\
+precise, these runes evaluate the `$` arm in cores, usually after modifying the\
+sample. (The default sample is replaced with the input values given in the\
 call.)
 
 These runes reduce to the `%=` rune.
 
-## `%_` "cencab"
+### `%_` "cencab"
 
 Resolve a wing with changes, preserving type.
 
-#### Syntax
+**Syntax**
 
 One fixed argument, then a variable number of pairs.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall style #1
-- ```hoon
+* Tall style #1
+* ```hoon
   %_  a=wing
     b=wing  c=hoon
     d=wing  e=hoon
@@ -104,10 +104,10 @@ One fixed argument, then a variable number of pairs.
   ==
   ```
 
----
+***
 
-- Tall style #2
-- ```hoon
+* Tall style #2
+* ```hoon
   %_    a=wing
       b=wing
     c=hoon
@@ -120,46 +120,45 @@ One fixed argument, then a variable number of pairs.
   ==
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %_(a=wing b=wing c=hoon, d=wing e=hoon, ...)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%cncb p=wing q=(list (pair wing hoon))]
 ```
 
-#### Expands to
+**Expands to**
 
 ```hoon
 ^+(a %=(a b c, d e, ...))
 ```
 
-#### Semantics
+**Semantics**
 
-A `%_` expression resolves to the value of the subject at wing `a`, but modified
-according to a series of changes: `b` is replaced with the product of `c`, `d`
-with the product of `e`, and so on. At compile time a type check is performed to
+A `%_` expression resolves to the value of the subject at wing `a`, but modified\
+according to a series of changes: `b` is replaced with the product of `c`, `d`\
+with the product of `e`, and so on. At compile time a type check is performed to\
 ensure that the resulting value is of the same type as `a`.
 
-#### Discussion
+**Discussion**
 
-`%_` is different from `%=` because `%=` can change the type of a wing with
+`%_` is different from `%=` because `%=` can change the type of a wing with\
 mutations. `%_` preserves the wing type.
 
-See [how wings are resolved](/language/hoon/reference/limbs/).
+See [how wings are resolved](../../../../../language/hoon/reference/limbs/).
 
-#### Examples
+**Examples**
 
 ```
 > =foo [p=42 q=6]
@@ -177,25 +176,23 @@ See [how wings are resolved](/language/hoon/reference/limbs/).
 ! nest-fail
 ```
 
----
+***
 
-## `%:` "cencol"
+### `%:` "cencol"
 
 Call a gate with many arguments.
 
-#### Syntax
+**Syntax**
 
 One fixed argument, then a variable number of arguments.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   %:  a=hoon
     b=hoon
     c=hoon
@@ -204,40 +201,39 @@ One fixed argument, then a variable number of arguments.
   ==
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %:(a b c d)
   ```
 
----
+***
 
-- Irregular
-- ```hoon
+* Irregular
+* ```hoon
     (a b c d)
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%cncl p=hoon q=(list hoon)]
 ```
 
-#### Semantics
+**Semantics**
 
-A `%:` expression calls a gate with many arguments. `a` is the gate to be
-called, and `b` through `d` are the arguments. If there is only one
-subexpression after `a`, its product is the sample. Otherwise, a single argument
-is constructed by evaluating all of `b` through `d` -- however many
+A `%:` expression calls a gate with many arguments. `a` is the gate to be\
+called, and `b` through `d` are the arguments. If there is only one\
+subexpression after `a`, its product is the sample. Otherwise, a single argument\
+is constructed by evaluating all of `b` through `d` -- however many\
 subexpressions there are -- and putting the result in a cell: `[b c ... d]`.
 
-#### Discussion
+**Discussion**
 
 When `%:` is used in tall-form syntax, the series of expressions after `p` must be terminated with `==`.
 
-#### Examples
+**Examples**
 
 ```
 > %:  add  22  33  ==
@@ -263,64 +259,60 @@ When `%:` is used in tall-form syntax, the series of expressions after `p` must 
 99
 ```
 
----
+***
 
-## `%.` "cendot"
+### `%.` "cendot"
 
 Call a gate (function), inverted.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   %.  a  b
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %.(a b)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%cndt p=hoon q=hoon]
 ```
 
-#### Semantics
+**Semantics**
 
-The `%.` rune is for evaluating the `$` arm of a gate, i.e., calling a function.
-`a` is for the desired sample value (i.e., input value), and `b` is the gate.
+The `%.` rune is for evaluating the `$` arm of a gate, i.e., calling a function.`a` is for the desired sample value (i.e., input value), and `b` is the gate.
 
-#### Expands to
+**Expands to**
 
 ```hoon
 %-(b=hoon a=hoon)
 ```
 
-#### Discussion
+**Discussion**
 
-`%.` is just like `%-`, but with its subexpressions reversed; the argument comes
+`%.` is just like `%-`, but with its subexpressions reversed; the argument comes\
 first, and then the gate.
 
-#### Examples
+**Examples**
 
 ```
 > =add-triple |=([a=@ b=@ c=@] :(add a b c))
@@ -329,68 +321,64 @@ first, and then the gate.
 6
 ```
 
----
+***
 
-## `%-` "cenhep" {% #-cenhep %}
+### `%-` "cenhep" \{% #-cenhep %\}
 
 Call a gate (function).
 
-#### Syntax
+**Syntax**
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   %-  a
   b
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %-(a b)
   ```
 
----
+***
 
-- Irregular
-- ```hoon
+* Irregular
+* ```hoon
     (a b)
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%cnhp p=hoon q=hoon]
 ```
 
-#### Semantics
+**Semantics**
 
-This rune is for evaluating the `$` arm of a gate, i.e., calling a gate as a
-function. `a` is the gate, and `b` is the desired sample value (i.e., input
+This rune is for evaluating the `$` arm of a gate, i.e., calling a gate as a\
+function. `a` is the gate, and `b` is the desired sample value (i.e., input\
 value) for the gate.
 
-#### Expands to
+**Expands to**
 
 ```hoon
 %~($ a b)
 ```
 
-#### Discussion
+**Discussion**
 
-`%-` is used to call a function; `a` is the function
-([`gate`](/language/hoon/reference/rune/bar#-bartis), `q` the argument. `%-` is a
-special case of [`%~` ("censig")](#-censig), and a gate is a special case of a
-[door](/language/hoon/reference/rune/bar#_-barcab).
+`%-` is used to call a function; `a` is the function\
+([`gate`](../../../../../language/hoon/reference/rune/bar/#-bartis), `q` the argument. `%-` is a\
+special case of [`%~` ("censig")](cen.md#-censig), and a gate is a special case of a[door](../../../../../language/hoon/reference/rune/bar/#_-barcab).
 
-#### Examples
+**Examples**
 
 ```
 > =add-triple |=([a=@ b=@ c=@] :(add a b c))
@@ -402,59 +390,56 @@ special case of [`%~` ("censig")](#-censig), and a gate is a special case of a
 6
 ```
 
----
+***
 
-## `%^` "cenket"
+### `%^` "cenket"
 
 Call gate with triple sample.
 
-#### Syntax
+**Syntax**
 
 Four arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   %^    a
       b
     c
   d
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %^(a b c d)
   ```
 
----
+***
 
-- Irregular
-- ```hoon
+* Irregular
+* ```hoon
     (a b c d)
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%cnkt p=hoon q=hoon r=hoon s=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 ```hoon
 %-(a=hoon [b=hoon c=hoon d=hoon])
 ```
 
-#### Examples
+**Examples**
 
 ```
 > =add-triple |=([a=@ b=@ c=@] :(add a b c))
@@ -463,63 +448,60 @@ Four arguments, fixed.
 6
 ```
 
----
+***
 
-## `%+` "cenlus"
+### `%+` "cenlus"
 
 Call gate with a cell sample.
 
-#### Syntax
+**Syntax**
 
 Three arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   %+  a
     b
   c
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %+(a b c)
   ```
 
----
+***
 
-- Irregular
-- ```hoon
+* Irregular
+* ```hoon
     (a b c)
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%cnls p=hoon q=hoon r=hoon]
 ```
 
-#### Semantics
+**Semantics**
 
-A `%+` expression is for calling a gate with a cell sample. `a` is the gate to
+A `%+` expression is for calling a gate with a cell sample. `a` is the gate to\
 be called, `b` is for the head of the sample, and `c` is for the sample tail.
 
-#### Expands to
+**Expands to**
 
 ```hoon
 %-(a=hoon [b=hoon c=hoon])
 ```
 
-#### Examples
+**Examples**
 
 ```
 > =add-triple |=([a=@ b=@ c=@] :(add a b c))
@@ -528,64 +510,59 @@ be called, `b` is for the head of the sample, and `c` is for the sample tail.
 6
 ```
 
----
+***
 
-## `%~` "censig"
+### `%~` "censig"
 
 Evaluate an arm in a door.
 
-#### Syntax
+**Syntax**
 
 Three arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   %~  p=wing  q=hoon
   r=hoon
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %~(p q r)
   ```
 
----
+***
 
-- Irregular
-- ```
+* Irregular
+* ```
     ~(p q r1 r2 rn)
   ```
-{% /table %}
 
-In the irregular form, `r` may be split into multiple parts. Multiple parts of
-`r` will be formed into a cell.
+In the irregular form, `r` may be split into multiple parts. Multiple parts of`r` will be formed into a cell.
 
-#### Semantics
+**Semantics**
 
-A `%~` expression evaluates the arm of a door (i.e., a core with a sample). `p`
-is a wing that resolves to the arm from within the door in question. `q` is the
+A `%~` expression evaluates the arm of a door (i.e., a core with a sample). `p`\
+is a wing that resolves to the arm from within the door in question. `q` is the\
 door itself. `r` is the sample of the door.
 
-#### Discussion
+**Discussion**
 
 `%~` is the general case of a function call, `%-`. In both, we replace the sample (`+6`) of a core. In `%-` the core is a gate and the `$` arm is evaluated. In `%~` the core is a door and any arm may be evaluated. You must identify the arm to be run: `%~(arm door arg)`.
 
-Note also that `p` is a wing and can therefore be `.`, as in `~(. door
-sample)`. This little idiom lets you load your sample into the door once
+Note also that `p` is a wing and can therefore be `.`, as in `~(. door sample)`. This little idiom lets you load your sample into the door once\
 instead of over and over.
 
-See also [`|_`](/language/hoon/reference/rune/bar#_-barcab).
+See also [`|_`](../../../../../language/hoon/reference/rune/bar/#_-barcab).
 
-#### Examples
+**Examples**
 
 ```
 > =mycore |_  a=@
@@ -607,25 +584,23 @@ See also [`|_`](/language/hoon/reference/rune/bar#_-barcab).
 50
 ```
 
----
+***
 
-## `%*` "centar"
+### `%*` "centar"
 
 Evaluate an expression, then resolve a wing with changes.
 
-#### Syntax
+**Syntax**
 
 Two fixed arguments, then a variable number of pairs.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall style #1
-- ```hoon
+* Tall style #1
+* ```hoon
   %*  a=wing  b=hoon
     c=wing  d=hoon
     e=wing  f=hoon
@@ -634,10 +609,10 @@ Two fixed arguments, then a variable number of pairs.
   ==
   ```
 
----
+***
 
-- Tall style #2
-- ```hoon
+* Tall style #2
+* ```hoon
   %*    a=wing  b=hoon
       c=wing
     d=hoon
@@ -650,32 +625,31 @@ Two fixed arguments, then a variable number of pairs.
   ==
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %*(a b c d, e f, g h)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%cntr p=wing q=hoon r=(list (pair wing hoon))]
 ```
 
-#### Semantics
+**Semantics**
 
-A `%*` expression evaluates some arbitrary Hoon expression, `b`, and then
-resolves a wing of that result, with changes. `a` is the wing to be resolved,
+A `%*` expression evaluates some arbitrary Hoon expression, `b`, and then\
+resolves a wing of that result, with changes. `a` is the wing to be resolved,\
 and one or more changes is defined by the subexpressions after `b`.
 
-#### Expands to
+**Expands to**
 
 ```hoon
 =+  b=hoon
@@ -687,7 +661,7 @@ and one or more changes is defined by the subexpressions after `b`.
 ==
 ```
 
-#### Examples
+**Examples**
 
 ```
 > %*($ add a 2, b 3)
@@ -711,25 +685,23 @@ and one or more changes is defined by the subexpressions after `b`.
 [a=1 b=7 c=10]
 ```
 
----
+***
 
-## `%=` "centis"
+### `%=` "centis"
 
 Resolve a wing with changes.
 
-#### Syntax
+**Syntax**
 
 One fixed argument, then a variable number of pairs.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall style #1
-- ```hoon
+* Tall style #1
+* ```hoon
   %=  a=wing
     b=wing  c=hoon
     d=wing  e=hoon
@@ -738,10 +710,10 @@ One fixed argument, then a variable number of pairs.
   ==
   ```
 
----
+***
 
-- Tall style #2
-- ```hoon
+* Tall style #2
+* ```hoon
   %=    a=wing
       b=wing
     c=hoon
@@ -754,50 +726,47 @@ One fixed argument, then a variable number of pairs.
   ==
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   %=(a b c, d e, f g)
   ```
 
----
+***
 
-- Irregular
-- ```
+* Irregular
+* ```
     a(b c, d e, f g)
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%cnts p=wing q=(list (pair wing hoon))]
 ```
 
-#### Semantics
+**Semantics**
 
 A `%=` expression resolves a wing of the subject, but with changes made.
 
-If `a` resolves to a leg, a series of changes are made to wings of that leg
-(`b`, `d`, and `f` above are replaced with the respective products of `c`, `e`,
+If `a` resolves to a leg, a series of changes are made to wings of that leg\
+(`b`, `d`, and `f` above are replaced with the respective products of `c`, `e`,\
 and `g` above). The modified leg is returned.
 
-If `a` resolves to an arm, a series of changes are made to wings of the parent
-core of that arm. (Again, `b`, `d`, and `f` are replaced with the respective
-products of `c`, `e`, and `g`.) The arm is computed with the modified core as
+If `a` resolves to an arm, a series of changes are made to wings of the parent\
+core of that arm. (Again, `b`, `d`, and `f` are replaced with the respective\
+products of `c`, `e`, and `g`.) The arm is computed with the modified core as\
 the subject, and the product is returned.
 
-#### Discussion
+**Discussion**
 
-Note that `a` is a wing, not just any expression. Knowing that a function call
-`(foo baz)` involves evaluating `foo`, replacing its sample at slot `+6` with
-`baz`, and then resolving to the `$` limb, you might think `(foo baz)` would
+Note that `a` is a wing, not just any expression. Knowing that a function call`(foo baz)` involves evaluating `foo`, replacing its sample at slot `+6` with`baz`, and then resolving to the `$` limb, you might think `(foo baz)` would\
 mean `%=(foo +6 baz)`.
 
-But it's actually `=+(foo =>(%=(+2 +6 baz:+3) $))`. Even if `foo` is a wing, we
-would just be mutating `+6` within the core that defines the `foo` arm. Instead
-we want to modify the **product** of `foo`—the gate—so we have to pin it
+But it's actually `=+(foo =>(%=(+2 +6 baz:+3) $))`. Even if `foo` is a wing, we\
+would just be mutating `+6` within the core that defines the `foo` arm. Instead\
+we want to modify the **product** of `foo`—the gate—so we have to pin it\
 into the subject.
 
 Here's that again in tall form:
@@ -810,7 +779,7 @@ Here's that again in tall form:
   $
 ```
 
-#### Examples
+**Examples**
 
 ```
 > =foo [p=5 q=6]

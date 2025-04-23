@@ -1,31 +1,32 @@
+# flap
+
++++\
+title = "Serving a JS Game"\
+weight = 193\
 +++
-title = "Serving a JS Game"
-weight = 193
-+++
 
-In this tutorial, we will take an off-the-shelf JavaScript game which runs in the browser and connect it to an Urbit back-end.  This page assumes that you have completed some version of Hoon School and App School, whether the [live courses](/courses) or the [written docs](/courses/hoon-school).  Our goal is to show you one way of directly serving client code from an Urbit ship as server.
+In this tutorial, we will take an off-the-shelf JavaScript game which runs in the browser and connect it to an Urbit back-end. This page assumes that you have completed some version of Hoon School and App School, whether the [live courses](../../../../courses/) or the [written docs](../../../../courses/hoon-school/). Our goal is to show you one way of directly serving client code from an Urbit ship as server.
 
-_Flappy Bird_ is an "insanely irritating, difficult and frustrating game which combines a super-steep difficulty curve with bad, boring graphics and jerky movement" ([Huffington Post](https://web.archive.org/web/20140205084251/http://www.huffingtonpost.com/2014/02/03/flappy-bird-tips_n_4717406.html)).  We are going to implement `%flap`, a _Flappy Bird_ leaderboard using ~paldev’s `%pals` peer tracking agent.  The approach given in this tutorial will apply to any game which is primarily run in the browser and has some persistent state to retain across sessions or communicate between players at discrete intervals.  Direct player-v.-player games will require other techniques to implement.
+_Flappy Bird_ is an "insanely irritating, difficult and frustrating game which combines a super-steep difficulty curve with bad, boring graphics and jerky movement" ([Huffington Post](https://web.archive.org/web/20140205084251/http://www.huffingtonpost.com/2014/02/03/flappy-bird-tips_n_4717406.html)). We are going to implement `%flap`, a _Flappy Bird_ leaderboard using \~paldev’s `%pals` peer tracking agent. The approach given in this tutorial will apply to any game which is primarily run in the browser and has some persistent state to retain across sessions or communicate between players at discrete intervals. Direct player-v.-player games will require other techniques to implement.
 
-Our objective is to illustrate a minimum viable set of changes necessary to implement the task.  We should the following components when complete:
+Our objective is to illustrate a minimum viable set of changes necessary to implement the task. We should the following components when complete:
 
-1. A front end.  We will start with the JS browser app and make some adjustments so it can communicate with Urbit and display shared results.
-2. A data model.  Structure and mark files will allow the components of the system to seamlessly communicate.
-3. A back end.  Urbit will serve as the database for storing and propagating scores.  Urbit will also serve the front end.
-4. A communications protocol.  The leaderboard will need to know who to watch and track as peers.  We will utilize [~paldev](https://urbit.org/ids/~paldev)'s [`%pals`](https://urbit.org/applications/~paldev/pals) contact list.
+1. A front end. We will start with the JS browser app and make some adjustments so it can communicate with Urbit and display shared results.
+2. A data model. Structure and mark files will allow the components of the system to seamlessly communicate.
+3. A back end. Urbit will serve as the database for storing and propagating scores. Urbit will also serve the front end.
+4. A communications protocol. The leaderboard will need to know who to watch and track as peers. We will utilize [\~paldev](https://urbit.org/ids/~paldev)'s [`%pals`](https://urbit.org/applications/~paldev/pals) contact list.
 
-We will conceive of this app's communications structure as consisting of a _vertical_ component (which is the communication between the client in the browser and the Urbit ship as database) and a _horizontal_ component (which is the communication between Urbit peers).  Vertical communication will take place using JSON via the `%flap-action` mark, while horizontal communication will take place using the `%flap-update` mark.  Apps can achieve good data modularity using this separation.
+We will conceive of this app's communications structure as consisting of a _vertical_ component (which is the communication between the client in the browser and the Urbit ship as database) and a _horizontal_ component (which is the communication between Urbit peers). Vertical communication will take place using JSON via the `%flap-action` mark, while horizontal communication will take place using the `%flap-update` mark. Apps can achieve good data modularity using this separation.
 
 ![](https://media.urbit.org/developers/vert-horz.svg)
 
+### Desk Setup
 
-##  Desk Setup
+As with all Urbit development, you should set up a development ship. In this case, it will be more convenient to have this ship be on the live network: a comet or a moon. Below, we refer to this as `comet`.
 
-As with all Urbit development, you should set up a development ship.  In this case, it will be more convenient to have this ship be on the live network:  a comet or a moon.  Below, we refer to this as `comet`.
+On that ship, `|install ~paldev %pals`. Optionally, download [\~paldev](https://urbit.org/ids/~paldev)'s [Suite repo](https://github.com/Fang-/suite) in case you need to refer to `%pals`-related code.
 
-On that ship, `|install ~paldev %pals`.  Optionally, download [~paldev](https://urbit.org/ids/~paldev)'s [Suite repo](https://github.com/Fang-/suite) in case you need to refer to `%pals`-related code.
-
-Download the [Flappy Bird repo](https://github.com/CodeExplainedRepo/Original-Flappy-bird-JavaScript/).  Although we will follow this clone, other versions and other games follow a similar structure and the below approach is highly transferrable.
+Download the [Flappy Bird repo](https://github.com/CodeExplainedRepo/Original-Flappy-bird-JavaScript/). Although we will follow this clone, other versions and other games follow a similar structure and the below approach is highly transferrable.
 
 At this point, you should have a directory structure containing the following:
 
@@ -35,9 +36,10 @@ At this point, you should have a directory structure containing the following:
 └── comet/
 ```
 
-We now need to create a new clean desk in the development ship.  In the Dojo:
+We now need to create a new clean desk in the development ship. In the Dojo:
 
-```hoon {% copy=true %}
+```hoon
+
 |mount %base
 |mount %landscape
 |merge %flap our %base
@@ -46,15 +48,21 @@ We now need to create a new clean desk in the development ship.  In the Dojo:
 
 Back on Earth:
 
-```sh {% copy=true %}
+```sh
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 rm -rf comet/flap/*
 echo "~[%flap]" > comet/flap/desk.bill
 echo "[%zuse 417]" > comet/flap/sys.kelvin
 ```
 
-At this point, we need to take stock of what kind of file marks and libraries we need to make available:  `kelvin`, `docket-0`, and so forth.  While there are marks for `js` and `png`, there is no `wav` so we'll handle that directly.
+At this point, we need to take stock of what kind of file marks and libraries we need to make available: `kelvin`, `docket-0`, and so forth. While there are marks for `js` and `png`, there is no `wav` so we'll handle that directly.
 
-```sh {% copy=true %}
+```sh
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 # Copy necessary %base files to %flap
 cp -r comet/base/lib comet/flap
 cp -r comet/base/sur comet/flap
@@ -78,7 +86,10 @@ cp schooner/lib/schooner.hoon comet/flap/lib
 
 Make an appropriate docket file `desk.docket-0`, e.g.:
 
-```hoon {% copy=true %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 :~
   title+'Flappy Bird'
   info+'An insanely irritating, difficult and frustrating game which combines a super-steep difficulty curve with bad, boring graphics and jerky movement.'
@@ -112,18 +123,20 @@ At this point, your overall directory structure (not showing most of the files) 
 
 `|commit %flap` to include all of these files.
 
+### Front End
 
-##  Front End
+If you open `index.html` in `Original-Flappy-bird-JavaScript/` in a web browser, the game should work interactively. Only mouse clicks are recorded as events. The only termination condition is death.
 
-If you open `index.html` in `Original-Flappy-bird-JavaScript/` in a web browser, the game should work interactively.  Only mouse clicks are recorded as events.  The only termination condition is death.
+![](flappy-launch.png)
 
-![](./flappy-launch.png)
+The original authors of this clone, CodeExplained, provide [a walkthrough video](https://youtu.be/0ArCFchlTq4) which explains how the front-end code works in detail. For our purposes now, you don't need to know much JavaScript—just enough to be able to interpret and modify some simple statements and functions.
 
-The original authors of this clone, CodeExplained, provide [a walkthrough video](https://youtu.be/0ArCFchlTq4) which explains how the front-end code works in detail.  For our purposes now, you don't need to know much JavaScript—just enough to be able to interpret and modify some simple statements and functions.
+Since the game is served directly from the `index.html` file, we can simply copy that file into Urbit and have things work. Other files also have appropriate marks except for the sound files which are `wav` files. Since `wav` files are a standard MIME type for web browsers to handle, we don't need to do very much to represent them correctly: by copying `/mar/png.hoon` to `/mar/wav.hoon` and modifying it to present an `/audio/wav` MIME type, you can correctly include
 
-Since the game is served directly from the `index.html` file, we can simply copy that file into Urbit and have things work.  Other files also have appropriate marks except for the sound files which are `wav` files.  Since `wav` files are a standard MIME type for web browsers to handle, we don't need to do very much to represent them correctly:  by copying `/mar/png.hoon` to `/mar/wav.hoon` and modifying it to present an `/audio/wav` MIME type, you can correctly include 
+```hoon
 
-```hoon {% copy=true %}
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 |_  dat=@
 ++  grow
   |%
@@ -146,25 +159,28 @@ cp -r Original-Flappy-bird-JavaScript/* comet/flap/app/flap
 
 and `|commit %flap`.
 
-The `index.html` file will still work if you open it in the browser directly, but it doesn't have any connection to Urbit yet.  Clay doesn't know where to build everything and hook it up, so at a minimum we have to load and display the front-end using `/app/flap.hoon`.
+The `index.html` file will still work if you open it in the browser directly, but it doesn't have any connection to Urbit yet. Clay doesn't know where to build everything and hook it up, so at a minimum we have to load and display the front-end using `/app/flap.hoon`.
 
-##  Data Model
+### Data Model
 
-Different parts of the system need to converge on their shared vision of the world.  Thus, `/sur` and `/mar`.  We aren't interested in calculating the gameplay mechanics, only in the scores.  So we expect to be able to track our state including:
+Different parts of the system need to converge on their shared vision of the world. Thus, `/sur` and `/mar`. We aren't interested in calculating the gameplay mechanics, only in the scores. So we expect to be able to track our state including:
 
-- our current score (last game) (`score`)
-- our all-time high score (`hiscore`)
-- the all-time high score of our `%pals` (`scores`)
+* our current score (last game) (`score`)
+* our all-time high score (`hiscore`)
+* the all-time high score of our `%pals` (`scores`)
 
 We don't need to actively track friends _except_ that they will have entries in `scores`, even if zero.
 
 **`/sur/flap.hoon`**:
 
-The basic structure file defines friendship, which it will derive from `%pals`, and scores.  Scores are simple, so they're just a matter of a single `@ud` number.
+The basic structure file defines friendship, which it will derive from `%pals`, and scores. Scores are simple, so they're just a matter of a single `@ud` number.
 
-We `%gain` a `score` at the end of each game by an `%action`, and track our own `hiscore`.  We `%lord` a high score over others (or they over us) by sending and receiving `%update`s.  (So `%action`s are vertical between client and server, while `%update`s are horizontal between servers.)
+We `%gain` a `score` at the end of each game by an `%action`, and track our own `hiscore`. We `%lord` a high score over others (or they over us) by sending and receiving `%update`s. (So `%action`s are vertical between client and server, while `%update`s are horizontal between servers.)
 
-```hoon {% copy=true %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 |%
 +$  fren    @p
 +$  score   @ud
@@ -182,7 +198,7 @@ We `%gain` a `score` at the end of each game by an `%action`, and track our own 
 
 **`/mar/flap/action.hoon`**:
 
-Actions are sent from the client to the Urbit ship.  An incoming JSON will be of the form
+Actions are sent from the client to the Urbit ship. An incoming JSON will be of the form
 
 ```json
 {
@@ -194,7 +210,10 @@ Actions are sent from the client to the Urbit ship.  An incoming JSON will be of
 
 Given an action to `%gain` a score as a JSON, we process it in the mark and yield it as a `%flap-action`.
 
-```hoon {% copy=true %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 /-  flap
 |_  =action:flap
 ++  grab
@@ -221,7 +240,10 @@ Given an action to `%gain` a score as a JSON, we process it in the mark and yiel
 
 Updates are sent between Urbit peers.
 
-```hoon {% copy=true %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 /-  flap
 |_  =update:flap
 ++  grab
@@ -236,14 +258,16 @@ Updates are sent between Urbit peers.
 --
 ```
 
-
-##  Back End
+### Back End
 
 The main app implements the logic for exposing and tracking data.
 
 **`/app/flap.hoon`** (version 1):
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true' data-mode='collapse'></div>
+
   ::  flap.hoon
 ::::  Maintains leaderboard for Flappy Bird on Mars.
 ::
@@ -493,11 +517,11 @@ The main app implements the logic for exposing and tracking data.
 
 Then `|install our %flap` to install the app.
 
-Now when we navigate to `localhost:8080/apps/flap`, what do we see?  The game canvas is merely an empty box.  What can we do to fix this?
+Now when we navigate to `localhost:8080/apps/flap`, what do we see? The game canvas is merely an empty box. What can we do to fix this?
 
-### Serving Correctly
+#### Serving Correctly
 
-If we investigate the Developer Tools console in our browser, we see messages to the effect that resources are unable to be located.  Resource paths (for `js`, `png`, and `wav` files) tell the browser from whence the resources will come when they are loaded.  We have two options here as well:  hot-link the resource from its GitHub or other source or serve the resource from Urbit.
+If we investigate the Developer Tools console in our browser, we see messages to the effect that resources are unable to be located. Resource paths (for `js`, `png`, and `wav` files) tell the browser from whence the resources will come when they are loaded. We have two options here as well: hot-link the resource from its GitHub or other source or serve the resource from Urbit.
 
 If we hot-link the resources, the corresponding lines will look like this:
 
@@ -508,9 +532,12 @@ sprite.src = "https://raw.githubusercontent.com/CodeExplainedRepo/Original-Flapp
 
 This is easiest if less elegant than serving the files from Urbit.
 
-If we want to serve our files from Urbit, we need to build the files and serve them to particular endpoints so that they are visible to the browser.  This means importing and serving these to make these available.  It also means renaming the files so that they are compatible with `@ta`-style path entries.
+If we want to serve our files from Urbit, we need to build the files and serve them to particular endpoints so that they are visible to the browser. This means importing and serving these to make these available. It also means renaming the files so that they are compatible with `@ta`-style path entries.
 
-```sh {% copy=true %}
+```sh
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 mv comet/flap/app/flap/audio/sfx_point.wav comet/flap/app/flap/audio/sfx-point.wav
 mv comet/flap/app/flap/audio/sfx_flap.wav comet/flap/app/flap/audio/sfx-flap.wav
 mv comet/flap/app/flap/audio/sfx_hit.wav comet/flap/app/flap/audio/sfx-hit.wav
@@ -520,7 +547,10 @@ mv comet/flap/app/flap/audio/sfx_die.wav comet/flap/app/flap/audio/sfx-die.wav
 
 The import lines at the top of `/app/flap.hoon` build each file according to its mark:
 
-```hoon {% copy=true %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true'></div>
+
 /*  flapjs  %js    /app/flap/game/js
 /*  flapsprite  %png   /app/flap/img/sprite/png
 /*  flapaudios  %wav   /app/flap/audio/sfx-point/wav
@@ -532,7 +562,10 @@ The import lines at the top of `/app/flap.hoon` build each file according to its
 
 Later in `/app/flap.hoon` we serve the files at particular endpoints:
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true' data-mode='collapse'></div>
+
   [%apps %flap %game %js ~]
 :_  this
 %-  send
@@ -613,28 +646,31 @@ const DIE = new Audio();
 DIE.src = "flap/audio/sfx-die/wav";
 ```
 
-Flappy Bird in HTML+JS needs Urbit affordances so it knows how to talk to the app backend.  Changes like the above will be common in adapting non-Hoon-compliant code due to assumptions about file location and naming conventions, but most of the time your process of adaptation will look much like the above.
+Flappy Bird in HTML+JS needs Urbit affordances so it knows how to talk to the app backend. Changes like the above will be common in adapting non-Hoon-compliant code due to assumptions about file location and naming conventions, but most of the time your process of adaptation will look much like the above.
 
-You can check out the API endpoints listed in the code above:  `/apps/flap/whoami`, `/apps/flap/img/sprite/png` and so forth, to see what they serve to the browser as.
+You can check out the API endpoints listed in the code above: `/apps/flap/whoami`, `/apps/flap/img/sprite/png` and so forth, to see what they serve to the browser as.
 
-This version of the app should run in your browser correctly once you `|commit %flap`.  Urbit knows where all resources are and how to serve them.  However, while the vertical communications work (between client and server), the horizontal communications are still missing (between Urbit peers).
+This version of the app should run in your browser correctly once you `|commit %flap`. Urbit knows where all resources are and how to serve them. However, while the vertical communications work (between client and server), the horizontal communications are still missing (between Urbit peers).
 
-> ##  Cross-Origin Resource Sharing
+> ### Cross-Origin Resource Sharing
 >
-> CORS is a security policy that allows you to load resources dynamically with prior approval from the browser and server.  Sometimes when you are serving various game configurations during development, you may arrive a situation in which things aren't loading correctly to due to the CORS policy.  (When things are entirely served from your Urbit ship then this shouldn't be an issue.)  If you encounter this problem on your way, however, you can [set up CORS origins](/system/kernel/eyre/guides/guide#managing-cors-origins) for Eyre by telling your Urbit ship to allow `localhost` files to be served on the appropriate port.
+> CORS is a security policy that allows you to load resources dynamically with prior approval from the browser and server. Sometimes when you are serving various game configurations during development, you may arrive a situation in which things aren't loading correctly to due to the CORS policy. (When things are entirely served from your Urbit ship then this shouldn't be an issue.) If you encounter this problem on your way, however, you can [set up CORS origins](../../../../system/kernel/eyre/guides/guide/#managing-cors-origins) for Eyre by telling your Urbit ship to allow `localhost` files to be served on the appropriate port.
 >
-> ```hoon {% copy=true %}
-> |cors-approve 'http://localhost:8080'
+> ```hoon
 > ```
 
+> |cors-approve 'http://localhost:8080'
+>
+> ```
+> ```
 
-##  Communications Protocol
+### Communications Protocol
 
-### Changes to Back End
+#### Changes to Back End
 
-#### Urbit as Database
+**Urbit as Database**
 
-Our app's state should retain a list of _all_ high scores it receives.  To that end, we will transition from a single high-score state to using a `(map fren score)`.
+Our app's state should retain a list of _all_ high scores it receives. To that end, we will transition from a single high-score state to using a `(map fren score)`.
 
 ```hoon
 /-  *flap, pals
@@ -674,9 +710,9 @@ We will include an upgrade path for the old agent:
 
 These values will be changed when peer state changes are received using `%pals`.
 
-#### Adding Friends
+**Adding Friends**
 
-`%pals` is a very simple contact manager which recognizes outgoing requests, incoming requests, and mutually recognized peers.  Let's integrate knowledge of other friends (and thus the ability to maintain a leaderboard of our friends).  We will base our leaderboard on outgoing requests for simplicity.
+`%pals` is a very simple contact manager which recognizes outgoing requests, incoming requests, and mutually recognized peers. Let's integrate knowledge of other friends (and thus the ability to maintain a leaderboard of our friends). We will base our leaderboard on outgoing requests for simplicity.
 
 You should copy `%pals` support files over to our working desk.
 
@@ -688,9 +724,9 @@ cp suite/sur/pals.hoon comet/flap/sur
 cp -r suite/mar/pals comet/flap/mar
 ```
 
-When dealing with `%pals`, we need to maintain some list of our friends and their current known high scores (which means modifying the app's state) and dealing with sending and receiving notifications.  That is reflected in adding `scores` to the new state in the state definition in `/app/flap.hoon`.
+When dealing with `%pals`, we need to maintain some list of our friends and their current known high scores (which means modifying the app's state) and dealing with sending and receiving notifications. That is reflected in adding `scores` to the new state in the state definition in `/app/flap.hoon`.
 
-Subscriptions will all take place over the `/flap` path.  In the `++on-poke` arm, we need to issue notices along that arm with the `%flap-update` mark.
+Subscriptions will all take place over the `/flap` path. In the `++on-poke` arm, we need to issue notices along that arm with the `%flap-update` mark.
 
 ```hoon
   %flap-action
@@ -715,7 +751,7 @@ We also need to process incoming `%fact`s with a `%flap-update` cage in `++on-ag
 `this(scores (~(put by scores) fren.upd score.upd))
 ```
 
-Changes to `%pals` come in along the path `/newpals`, so we need to watch for incoming values there.  `%pals` organizes friends to `%meet` for the first time or `%part` when they separate.  Thus we add or remove entries from our `scores.state`.
+Changes to `%pals` come in along the path `/newpals`, so we need to watch for incoming values there. `%pals` organizes friends to `%meet` for the first time or `%part` when they separate. Thus we add or remove entries from our `scores.state`.
 
 ```hoon
   [%newpals ~]
@@ -742,11 +778,14 @@ Changes to `%pals` come in along the path `/newpals`, so we need to watch for in
 ==
 ```
 
-With all of the above, you should have a working `%flappy` instance at `http://localhost:8080/apps/flappy`.  Use `:flappy +dbug` to check that the score is being communicated back.
+With all of the above, you should have a working `%flappy` instance at `http://localhost:8080/apps/flappy`. Use `:flappy +dbug` to check that the score is being communicated back.
 
 **`/app/flap.hoon`** (version 2):
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true' data-mode='collapse'></div>
+
   ::  flap.hoon
 ::::  Maintains leaderboard for Flappy Bird on Mars.
 ::
@@ -1048,9 +1087,9 @@ With all of the above, you should have a working `%flappy` instance at `http://l
 --
 ```
 
-### Changes to Front End
+#### Changes to Front End
 
-Now that the a leaderboard is supported, we need a way to display it alongside the browser game.  To wit, we will add some `async` functions to retrieve key bits of information from the ship and display it in a table.
+Now that the a leaderboard is supported, we need a way to display it alongside the browser game. To wit, we will add some `async` functions to retrieve key bits of information from the ship and display it in a table.
 
 ```js
 // URBIT STATE
@@ -1077,7 +1116,7 @@ document.getElementById("hiscore").innerHTML = myhiscore;
 document.getElementById("score").innerHTML = myscore;
 ```
 
-along with similar modest changes in the final file (included below in its entirety).  E.g. on death we modify some value we placed in tags in `index.html`:
+along with similar modest changes in the final file (included below in its entirety). E.g. on death we modify some value we placed in tags in `index.html`:
 
 ```js
 if(state.current == state.game){
@@ -1114,7 +1153,10 @@ If you examine `++on-poke` in `/app/flap.hoon`, you will see that HTTP `POST` re
 
 **`/app/flap/index.html`** (version 2):
 
-```html {% copy=true mode="collapse" %}
+```html
+
+<div data-gb-custom-block data-tag="copy" data-0='true' data-mode='collapse'></div>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1147,7 +1189,10 @@ If you examine `++on-poke` in `/app/flap.hoon`, you will see that HTTP `POST` re
 
 **`/app/flap/game.js`** (version 2):
 
-```js {% copy=true mode="collapse" %}
+```js
+
+<div data-gb-custom-block data-tag="copy" data-0='true' data-mode='collapse'></div>
+
 // URBIT STATE
 async function getmyship() {
     const response = await fetch('/apps/flap/whoami');
@@ -1593,20 +1638,23 @@ function loop(){
 loop();
 ```
 
-At this point, if we refresh the page we will see our `%pals` data visible in the table.  You can set up multiple development comets with the desk and test it out.
+At this point, if we refresh the page we will see our `%pals` data visible in the table. You can set up multiple development comets with the desk and test it out.
 
 ```hoon
 |install our %flap
 :treaty|publish %flap
 ```
 
-### Beautification
+#### Beautification
 
 There's a final set of changes we can make to the styling which makes this a much prettier app while still keeping these simple:
 
 **`/app/flap/index.html`** (version 3):
 
-```html {% copy=true mode="collapse" %}
+```html
+
+<div data-gb-custom-block data-tag="copy" data-0='true' data-mode='collapse'></div>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1696,7 +1744,9 @@ There's a final set of changes we can make to the styling which makes this a muc
 
 **`/app/flap/game.js`** (version 3):
 
-```hoon {% copy=true mode="collapse" %}
+```hoon
+
+<div data-gb-custom-block data-tag="copy" data-0='true' data-mode='collapse'></div>
 // URBIT STATE
 async function getmyship() {
     const response = await fetch('/apps/flap/whoami');
@@ -2147,12 +2197,11 @@ function loop(){
 loop();
 ```
 
+### What's Next?
 
-##  What's Next?
+After completing this tutorial, you should think about how to apply what you've seen to other applications. Some things to think about:
 
-After completing this tutorial, you should think about how to apply what you've seen to other applications.  Some things to think about:
-
-- What do other games need?
-- What internal state do other games maintain?
-- What makes sense to share via Urbit peers?
-- How can we serve other components directly from the ship?
+* What do other games need?
+* What internal state do other games maintain?
+* What makes sense to share via Urbit peers?
+* How can we serve other components directly from the ship?

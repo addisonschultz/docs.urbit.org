@@ -1,127 +1,126 @@
-+++
-title = ": col · Cells"
+# col
+
++++\
+title = ": col · Cells"\
 weight = 40
 
-[glossaryEntry.col]
-name = "col"
-symbol = ":"
-usage = "Cells"
+\[glossaryEntry.col]\
+name = "col"\
+symbol = ":"\
+usage = "Cells"\
 desc = "Runes used to produce cells, which are pairs of nouns."
 
-[glossaryEntry.colcab]
-name = "colcab"
-symbol = ":_"
-usage = "Cells"
-slug = "#_-colcab"
-desc = "<code>[%clcb p=hoon q=hoon]</code>; construct a cell, inverted."
+\[glossaryEntry.colcab]\
+name = "colcab"\
+symbol = ":_"_\
+_usage = "Cells"_\
+_slug = "#_-colcab"\
+desc = "`[%clcb p=hoon q=hoon]`; construct a cell, inverted."
 
-[glossaryEntry.colcol]
-name = "colcol"
-symbol = "::"
-usage = "Cells"
-slug = "#-colcol"
+\[glossaryEntry.colcol]\
+name = "colcol"\
+symbol = "::"\
+usage = "Cells"\
+slug = "#-colcol"\
 desc = "Code comment."
 
-[glossaryEntry.colhep]
-name = "colhep"
-symbol = ":-"
-usage = "Cells"
-slug = "#--colhep"
-desc = "<code>[%clhp p=hoon q=hoon]</code>: construct a cell (2-tuple)."
+\[glossaryEntry.colhep]\
+name = "colhep"\
+symbol = ":-"\
+usage = "Cells"\
+slug = "#--colhep"\
+desc = "`[%clhp p=hoon q=hoon]`: construct a cell (2-tuple)."
 
-[glossaryEntry.colket]
-name = "colket"
-symbol = ":^"
-usage = "Cells"
-slug = "#-colket"
-desc = "<code>[%clkt p=hoon q=hoon r=hoon s=hoon]</code>: construct a quadruple (4-tuple)."
+\[glossaryEntry.colket]\
+name = "colket"\
+symbol = ":^"\
+usage = "Cells"\
+slug = "#-colket"\
+desc = "`[%clkt p=hoon q=hoon r=hoon s=hoon]`: construct a quadruple (4-tuple)."
 
-[glossaryEntry.collus]
-name = "collus"
-symbol = ":+"
-usage = "Cells"
-slug = "#-collus"
-desc = "<code>[%clls p=hoon q=hoon r=hoon]</code>: construct a triple (3-tuple)."
+\[glossaryEntry.collus]\
+name = "collus"\
+symbol = ":+"\
+usage = "Cells"\
+slug = "#-collus"\
+desc = "`[%clls p=hoon q=hoon r=hoon]`: construct a triple (3-tuple)."
 
-[glossaryEntry.colsig]
-name = "colsig"
-symbol = ":~"
-usage = "Cells"
-slug = "#-colsig"
-desc = "<code>[%clsg p=(list hoon)]</code>: construct a null-terminated list."
+\[glossaryEntry.colsig]\
+name = "colsig"\
+symbol = ":\~"\
+usage = "Cells"\
+slug = "#-colsig"\
+desc = "`[%clsg p=(list hoon)]`: construct a null-terminated list."
 
-[glossaryEntry.coltar]
-name = "coltar"
-symbol = ":*"
-usage = "Cells"
-slug = "#-coltar"
-desc = "<code>[%cltr p=(list hoon)]</code>: construct an n-tuple."
+\[glossaryEntry.coltar]\
+name = "coltar"\
+symbol = ":\*"\
+usage = "Cells"\
+slug = "#-coltar"\
+desc = "`[%cltr p=(list hoon)]`: construct an n-tuple."
 
 +++
 
-The `:` ("col") expressions are used to produce cells, which are pairs of
+The `:` ("col") expressions are used to produce cells, which are pairs of\
 values. E.g., `:-(p q)` produces the cell `[p q]`. All `:` runes reduce to `:-`.
 
-## `:-` "colhep"
+### `:-` "colhep"
 
 Construct a cell (2-tuple).
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   :-  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   :-(p q)
   ```
 
----
+***
 
-- Irregular #1
-- ```hoon
+* Irregular #1
+* ```hoon
   [p q]
   ```
 
----
+***
 
-- Irregular #2
-- ```
+* Irregular #2
+* ```
     p^q
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%clhp p=hoon q=hoon]
 ```
 
-#### Produces
+**Produces**
 
 The cell of `p` and `q`.
 
-#### Discussion
+**Discussion**
 
-Hoon expressions actually use the same "autocons" pattern as Nock
-formulas. If you're assembling expressions (which usually only the
+Hoon expressions actually use the same "autocons" pattern as Nock\
+formulas. If you're assembling expressions (which usually only the\
 compiler does), `[a b]` is the same as `:-(a b)`.
 
-#### Examples
+**Examples**
 
 ```
 > :-(1 2)
@@ -131,113 +130,107 @@ compiler does), `[a b]` is the same as `:-(a b)`.
 [1 2]
 ```
 
----
+***
 
-## `:_` "colcab"
+### `:_` "colcab"
 
 Construct a cell, inverted.
 
-#### Syntax
+**Syntax**
 
 Two arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   :_  p
   q
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   :_(p q)
   ```
 
----
+***
 
-- Irregular
-- None.
-{% /table %}
+* Irregular
+* None.
 
-#### AST
+**AST**
 
 ```hoon
 [%clcb p=hoon q=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 ```hoon
 :-(q p)
 ```
 
-#### Examples
+**Examples**
 
 ```
 > :_(1 2)
 [2 1]
 ```
 
----
+***
 
-## `:+` "collus"
+### `:+` "collus"
 
 Construct a triple (3-tuple).
 
-#### Syntax
+**Syntax**
 
 Three arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   :+  p
     q
   r
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   :+(p q r)
   ```
 
----
+***
 
-- Irregular
-- ```hoon
+* Irregular
+* ```hoon
     [p q r]
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%clls p=hoon q=hoon r=hoon]
 ```
 
-#### Expands to:
+**Expands to:**
 
 ```hoon
 :-(p :-(q r))
 ```
 
-#### Examples
+**Examples**
 
 ```
 > :+  1
@@ -249,59 +242,56 @@ Three arguments, fixed.
 [%a ~ 'b']
 ```
 
----
+***
 
-## `:^` "colket"
+### `:^` "colket"
 
 Construct a quadruple (4-tuple).
 
-#### Syntax
+**Syntax**
 
 Four arguments, fixed.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   :^    p
       q
     r
   s
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   :^(p q r s)
   ```
 
----
+***
 
-- Irregular
-- ```hoon
+* Irregular
+* ```hoon
     [p q r s]
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%clkt p=hoon q=hoon r=hoon s=hoon]
 ```
 
-#### Expands to
+**Expands to**
 
 ```hoon
 :-(p :-(q :-(r s)))
 ```
 
-#### Examples
+**Examples**
 
 ```
 > :^(1 2 3 4)
@@ -314,25 +304,23 @@ Four arguments, fixed.
 [5 6 7 8]
 ```
 
----
+***
 
-## `:*` "coltar"
+### `:*` "coltar"
 
 Construct an n-tuple.
 
-#### Syntax
+**Syntax**
 
 Variable number of arguments.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   :*  p1
       p2
       p3
@@ -340,28 +328,27 @@ Variable number of arguments.
   ==
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   :*(p1 p2 p3 pn)
   ```
 
----
+***
 
-- Irregular
-- ```
+* Irregular
+* ```
     [p1 p2 p3 pn]
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%cltr p=(list hoon)]
 ```
 
-#### Expands to
+**Expands to**
 
 **Pseudocode**: `a`, `b`, `c`, ... as elements of `p`:
 
@@ -369,7 +356,7 @@ Variable number of arguments.
 :-(a :-(b :-(c :-(... z)))))
 ```
 
-#### Desugaring
+**Desugaring**
 
 ```hoon
 |-
@@ -381,7 +368,7 @@ Variable number of arguments.
 $(p t.p)
 ```
 
-#### Examples
+**Examples**
 
 ```
 > :*(5 3 4 1 4 9 0 ~ 'a')
@@ -403,25 +390,23 @@ $(p t.p)
 [5 3 4 1 4 9 0 ~ 'a']
 ```
 
----
+***
 
-## `:~` "colsig"
+### `:~` "colsig"
 
 Construct a null-terminated list.
 
-#### Syntax
+**Syntax**
 
 Variable number of arguments.
 
-{% table %}
+* Form
+* Syntax
 
-- Form
-- Syntax
+***
 
----
-
-- Tall
-- ```hoon
+* Tall
+* ```hoon
   :~  p1
       p2
       p3
@@ -429,28 +414,27 @@ Variable number of arguments.
   ==
   ```
 
----
+***
 
-- Wide
-- ```hoon
+* Wide
+* ```hoon
   :~(p1 p2 p3 pn)
   ```
 
----
+***
 
-- Irregular
-- ```
+* Irregular
+* ```
     ~[p1 p2 p3 pn]
   ```
-{% /table %}
 
-#### AST
+**AST**
 
 ```hoon
 [%clsg p=(list hoon)]
 ```
 
-#### Expands to
+**Expands to**
 
 **Pseudocode**: `a`, `b`, `c`, ... as elements of `p`:
 
@@ -458,7 +442,7 @@ Variable number of arguments.
 :-(a :-(b :-(c :-(... :-(z ~)))))
 ```
 
-#### Desugaring
+**Desugaring**
 
 ```hoon
 |-
@@ -468,12 +452,12 @@ Variable number of arguments.
 $(p t.p)
 ```
 
-#### Discussion
+**Discussion**
 
-Note that this does not produce a `list` type, it just produces a
+Note that this does not produce a `list` type, it just produces a\
 null-terminated n-tuple. To make it a proper `list` it must be cast or molded.
 
-#### Examples
+**Examples**
 
 ```
 > :~(5 3 4 2 1)
@@ -491,19 +475,19 @@ null-terminated n-tuple. To make it a proper `list` it must be cast or molded.
 [5 3 4 2 1 ~]
 ```
 
----
+***
 
-## `::` "colcol"
+### `::` "colcol"
 
 Code comment.
 
-#### Syntax
+**Syntax**
 
 ```hoon
 ::  any text you like!
 ```
 
-#### Examples
+**Examples**
 
 ```hoon
 ::
